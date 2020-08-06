@@ -1,17 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './App'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const firebase=require('firebase')
+require('firebase/firestore')
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+firebase.initializeApp({
+    apiKey: "AIzaSyBN4OxyFPnGpYmUbrpZgbBsop79KccRgXI",
+    authDomain: "quote-7cbcd.firebaseapp.com",
+    databaseURL: "https://quote-7cbcd.firebaseio.com",
+    projectId: "quote-7cbcd",
+    storageBucket: "quote-7cbcd.appspot.com",
+    messagingSenderId: "819773771295",
+    appId: "1:819773771295:web:54c4b62f06e1473ec00f2a"
+})
+
+ReactDOM.render(<App />,document.getElementById('root'))
