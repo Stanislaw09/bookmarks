@@ -1,8 +1,20 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect} from 'react'
+import {Tabs, Tab, makeStyles} from '@material-ui/core'
+import {Quotes} from './quotes'
+import {Pages} from './pages'
 const firebase=require('firebase')
+
+const useStyles=makeStyles({
+    header:{
+        backgroundColor: '#87277e'
+    }
+})
 
 function App(){
     const[quotes, setQuotes]=useState(undefined)
+    const[pages, setPages]=useState(undefined)
+    const[value, setValue]=useState(0)
+    const classes=useStyles()
 
     useEffect(()=>{
         firebase
@@ -16,12 +28,44 @@ function App(){
                 })
                 setQuotes(_quotes)
             })
+
+        firebase
+            .firestore()
+            .collection('websites')
+            .onSnapshot(serverUpdate=>{
+                const _pages=serverUpdate.docs.map(item=>{
+                    const data=item.data()
+                    data['id']=item.id
+                    return data
+                })
+                setPages(_pages)
+            })
     },[])
 
-    console.log(quotes);
+    const handleChange=(event, newValue)=>setValue(newValue)
+
+    const TabPanel=props=>{
+        return(
+            <div hidden={props.value!==props.index} role="tabpanel">
+                {props.children}
+            </div>
+        )
+    }
 
      return (
-        <div className="App">
+        <div>
+            <Tabs centered onChange={handleChange} className={classes.header}>
+                <Tab label='Quotes'/>
+                <Tab label='Pages'/>
+            </Tabs>
+
+            <TabPanel value={value} index={0} className={classes.tabPanel}>
+                <Quotes quotes={quotes}/>
+            </TabPanel>
+
+            <TabPanel value={value} index={1} className={classes.tabPanel}>
+                <Pages pages={pages}/>
+            </TabPanel>
         </div>
      )
 }
