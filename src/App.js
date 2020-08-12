@@ -7,6 +7,12 @@ const firebase=require('firebase')
 const useStyles=makeStyles({
     header:{
         backgroundColor: '#87277e'
+    },
+    caption:{
+        color: '#e9e9e9',
+        fontSize: '20px',
+        fontWeight: '500',
+        margin: '6px 20px'
     }
 })
 
@@ -55,8 +61,8 @@ function App(){
      return (
         <div>
             <Tabs centered onChange={handleChange} className={classes.header}>
-                <Tab label='Quotes'/>
-                <Tab label='Pages'/>
+                <Tab label='Quotes' className={classes.caption}/>
+                <Tab label='Pages' className={classes.caption}/>
             </Tabs>
 
             <TabPanel value={value} index={0} className={classes.tabPanel}>
