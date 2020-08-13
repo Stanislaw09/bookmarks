@@ -1,15 +1,24 @@
 import React,{useState, useEffect} from 'react'
 import {Tabs, Tab, makeStyles} from '@material-ui/core'
-import {Quotes} from './quotes'
-import {Pages} from './pages'
+import {Quotes} from './components/quotes'
+import {Pages} from './components/pages'
 const firebase=require('firebase')
 
 const useStyles=makeStyles({
+    container:{
+        minWidth: '560px'
+    },
     header:{
         backgroundColor: '#87277e'
     },
-    caption:{
-        color: '#e9e9e9',
+    captionEnabled:{
+        color: '#eee',
+        fontSize: '20px',
+        fontWeight: '500',
+        margin: '6px 20px'
+    },
+    captionDisabled:{
+        color: '#999',
         fontSize: '20px',
         fontWeight: '500',
         margin: '6px 20px'
@@ -59,10 +68,12 @@ function App(){
     }
 
      return (
-        <div>
+        <div className={classes.container}>
             <Tabs centered onChange={handleChange} className={classes.header}>
-                <Tab label='Quotes' className={classes.caption}/>
-                <Tab label='Pages' className={classes.caption}/>
+                <Tab
+                    label='Quotes'
+                    className={value===0 ? classes.captionEnabled : classes.captionDisabled}/>
+                <Tab label='Pages' className={value===1 ? classes.captionEnabled : classes.captionDisabled}/>
             </Tabs>
 
             <TabPanel value={value} index={0} className={classes.tabPanel}>

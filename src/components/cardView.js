@@ -4,12 +4,11 @@ import {Typography,
     Card,
     Avatar,
     Collapse,
+    Paper,
     Link,
     IconButton,
     Menu,
     MenuItem} from '@material-ui/core'
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import {FacebookShareButton,
     FacebookIcon,
     FacebookMessengerShareButton,
@@ -42,6 +41,7 @@ const useStyles=makeStyles(theme=>({
         display: 'inline-flex',
         width: '100%',
         justifyContent: 'space-between',
+        marginBottom: '6px'
     },
     cardSubHeader:{
         display: 'flex'
@@ -49,7 +49,7 @@ const useStyles=makeStyles(theme=>({
     avatar:{
         width: '40px',
         height: '40px',
-        margin: '6px'
+        margin: '6px 8px'
     },
     link:{
         margin: '12px 20px',
@@ -61,10 +61,12 @@ const useStyles=makeStyles(theme=>({
     },
     date:{
         margin: '12px 20px',
-        fontSize: '20px'
+        fontSize: '20px',
+        color: '#555'
     },
     menuItem:{
-        marginRight: '10px'
+        marginRight: '10px',
+        color: '#444'
     },
     collapse:{
         margin: '0  0 10px 16px',
@@ -142,7 +144,7 @@ export const CardView=props=>{
 
     return(
         <Card className={classes.card}>
-            <div className={classes.cardHeader}>
+            <Paper className={classes.cardHeader} elevation={5}>
                 <div className={classes.cardSubHeader}>
                     <Avatar src={props.quote.favIcon} className={classes.avatar}/>
 
@@ -169,7 +171,8 @@ export const CardView=props=>{
                     <MenuItem onClick={handleFavourite}>
                         {
                             props.quote.favourite ?
-                                <FavoriteIcon className={classes.menuItem}/> :
+                                <FavoriteIcon
+                                    style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.menuItem}/> :
                                 <FavoriteBorderIcon className={classes.menuItem}/>
                         }Favourite
                     </MenuItem>
@@ -239,7 +242,7 @@ export const CardView=props=>{
                     </Collapse>
 
                 </Menu>
-            </div>
+            </Paper>
 
             <div className={classes.cardContent}>
                 {props.quote.text.length>160 &&
