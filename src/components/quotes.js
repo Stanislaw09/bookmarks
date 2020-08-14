@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react'
-import {CardView} from './cardView'
+import {QuoteView} from './quoteView'
 import {Typography,
     makeStyles,
     IconButton,
@@ -31,11 +31,11 @@ const useStyles=makeStyles(theme=>({
     search:{
         display: 'inline-flex',
         backgroundColor: '#b3bcbf',
-        width: '310px',
+        width: '320px',
         borderRadius: '3px'
     },
     searchInput:{
-        width: '240px',
+        width: '250px',
         height: '40px',
         fontSize: '22px',
         padding: '0 10px',
@@ -97,7 +97,7 @@ export const Quotes=props=>{
     const [sortAnchor, setSortAnchor]=useState(null)
     const [quotes, setQuotes]=useState([])
     const [filter, setFilter]=useState('')
-    const [favouriteFilter, setfavouriteFilter]=useState(false)
+    const [favouriteFilter, setFavouriteFilter]=useState(false)
     const [currentSorting, setCurrentSorting]=useState('')
     const classes=useStyles()
 
@@ -150,7 +150,7 @@ export const Quotes=props=>{
                     <div className={classes.search}>
                         <SearchIcon className={classes.searchIcon}/>
                         <InputBase
-                            placeholder='Search...'
+                            placeholder='Search in domain...'
                             value={filter}
                             onChange={e=>setFilter(e.target.value)}
                             className={classes.searchInput}/>
@@ -160,7 +160,7 @@ export const Quotes=props=>{
                     </div>
 
                     <div className={classes.sortContainer}>
-                        <IconButton onClick={()=>setfavouriteFilter(prev=>!prev)} className={classes.favouriteBtn}>
+                        <IconButton onClick={()=>setFavouriteFilter(prev=>!prev)} className={classes.favouriteBtn}>
                             {favouriteFilter ? <FavoriteIcon
                                 style={{color: 'rgba(138, 46, 68, 0.95)'}}
                                 className={classes.favourite}/> : <FavoriteBorderIcon className={classes.favourite}/>}
@@ -197,7 +197,10 @@ export const Quotes=props=>{
             {quotes.length && quotes.map((quote,i)=>
                 quote.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0].includes(filter.toLowerCase()) &&
                 ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
-                    <CardView key={i} quote={quote}/>)}
+                    <QuoteView
+                        key={i}
+                        quote={quote}/>
+            )}
 
         </div>
     )

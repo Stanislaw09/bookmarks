@@ -113,7 +113,7 @@ const useStyles=makeStyles(theme=>({
     }
 }))
 
-export const CardView=props=>{
+export const QuoteView=props=>{
     const classes=useStyles()
     const [showText, setShowText]=useState(false)
     const [menuAnchor, setMenuAnchor]=useState(null)

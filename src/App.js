@@ -28,7 +28,7 @@ const useStyles=makeStyles({
 function App(){
     const[quotes, setQuotes]=useState(undefined)
     const[pages, setPages]=useState(undefined)
-    const[value, setValue]=useState(0)
+    const[value, setValue]=useState(1)
     const classes=useStyles()
 
     useEffect(()=>{
@@ -46,7 +46,7 @@ function App(){
 
         firebase
             .firestore()
-            .collection('websites')
+            .collection('pages')
             .onSnapshot(serverUpdate=>{
                 const _pages=serverUpdate.docs.map(item=>{
                     const data=item.data()
