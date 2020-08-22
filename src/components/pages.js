@@ -17,7 +17,8 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 const useStyles=makeStyles(theme=>({
     container:{
-        marginBottom: '26px'
+        marginBottom: '26px',
+        width: '100%'
     },
     nav:{
         backgroundColor: '#ddd',
@@ -85,6 +86,9 @@ const useStyles=makeStyles(theme=>({
         padding: '2px 6px',
         fontSize: '18px',
         color: '#555'
+    },
+    grid:{
+        padding: '16px 8px'
     }
 }))
 
@@ -115,16 +119,14 @@ export const Pages=props=>{
 
     const sortName=(order)=>{
         const sorted=[...pages].sort((a,b)=>{
-            let first=a.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]
-            let second=b.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]
-
-            if(first<second && order==='asc')
+            
+            if(a.title<b.title && order==='asc')
                 return -1
-            if(first<second && order==='desc')
+            if(a.title<b.title && order==='desc')
                 return 1
-            if(first>second && order==='asc')
+            if(a.title>b.title && order==='asc')
                 return 1
-            if(first>second && order==='desc')
+            if(a.title>b.title && order==='desc')
                 return -1
             return 0
         })
@@ -189,7 +191,7 @@ export const Pages=props=>{
                 </div>
             </div>
 
-            <Grid container spacing={2}>
+            <Grid container spacing={4} className={classes.grid}>
                 {pages.length && pages.map((page,i)=>
                     page.title.includes(filter.toLowerCase()) &&
                     ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&

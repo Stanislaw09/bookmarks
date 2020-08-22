@@ -30,17 +30,17 @@ const firebase=require('firebase')
 
 const useStyles=makeStyles(theme=>({
     grid:{
-        backgroundColor: '#20252e'
+        backgroundColor: '#20252e',
+        height: 'fit-content'
     },
     container:{
-        backgroundColor: 'rgba(174, 165, 213, 0.4)',
         height: '100%'
     },
     gridHeader:{
         display: 'inline-flex',
         width: '100%',
         justifyContent: 'space-between',
-        marginBottom: '6px'
+        marginBottom: '2px'
     },
     gridSubHeader:{
         display: 'flex'
@@ -97,11 +97,10 @@ const useStyles=makeStyles(theme=>({
     imgContainer:{
         overflow: 'hidden',
         width: '100%',
-        height: '100%'
+        maxHeight: '320px'
     },
     image:{
-        maxWidth: '100%',
-        maxHeight: '100%'
+        width: '100%'
     }
 }))
 

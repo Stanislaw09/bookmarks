@@ -23,7 +23,8 @@ const useStyles=makeStyles(theme=>({
         padding: '6px 22px'
     },
     subNav:{
-        width: '84%',
+        width: '73%',
+        margin: '0 auto',
         [theme.breakpoints.down('sm')]:{
             width: '96%'
         }

@@ -9,16 +9,16 @@ const useStyles=makeStyles({
         minWidth: '560px'
     },
     header:{
-        backgroundColor: '#87277e'
+        backgroundColor: '#7e3477'
     },
     captionEnabled:{
-        color: '#eee',
+        color: '#fff',
         fontSize: '20px',
         fontWeight: '500',
         margin: '6px 20px'
     },
     captionDisabled:{
-        color: '#999',
+        color: '#bdbdbd',
         fontSize: '20px',
         fontWeight: '500',
         margin: '6px 20px'
@@ -28,7 +28,7 @@ const useStyles=makeStyles({
 function App(){
     const[quotes, setQuotes]=useState(undefined)
     const[pages, setPages]=useState(undefined)
-    const[value, setValue]=useState(1)
+    const[value, setValue]=useState(0)
     const classes=useStyles()
 
     useEffect(()=>{

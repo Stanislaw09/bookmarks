@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import {Typography,
     makeStyles,
     Card,
@@ -31,8 +31,9 @@ const firebase=require('firebase')
 
 const useStyles=makeStyles(theme=>({
     card:{
-        width: '80%',
-        margin: '10px 20px',
+        width: '70%',
+        maxWidth: '1100px',
+        margin: '30px auto',
         [theme.breakpoints.down('sm')]:{
             width: '94%'
         }
@@ -173,7 +174,7 @@ export const QuoteView=props=>{
                             props.quote.favourite ?
                                 <FavoriteIcon
                                     style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.menuItem}/> :
-                                <FavoriteBorderIcon className={classes.menuItem}/>
+                                    <FavoriteBorderIcon className={classes.menuItem}/>
                         }Favourite
                     </MenuItem>
 
@@ -254,7 +255,7 @@ export const QuoteView=props=>{
                 }
 
                 <Collapse in={showText} collapsedHeight={110} className={classes.collapse}>
-                    <Typography className={classes.text}>{props.quote.text}</Typography>
+                    <Typography id='text' className={classes.text}>{props.quote.text}</Typography>
                 </Collapse>
             </div>
         </Card>
