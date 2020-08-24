@@ -16,57 +16,57 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 
 const useStyles=makeStyles(theme=>({
     container:{
-        marginBottom: '26px'
+        margin: '0 0 20px'
     },
     nav:{
         backgroundColor: '#ddd',
-        padding: '6px 22px'
+        padding: '2px 10px'
     },
     subNav:{
-        width: '73%',
         margin: '0 auto',
-        [theme.breakpoints.down('sm')]:{
-            width: '96%'
-        }
     },
     search:{
         display: 'inline-flex',
         backgroundColor: '#b3bcbf',
-        width: '320px',
+        width: '280px',
         borderRadius: '3px'
     },
     searchInput:{
         width: '250px',
-        height: '40px',
-        fontSize: '22px',
+        height: '36px',
+        fontSize: '18px',
         padding: '0 10px',
         margin: '4px 4px',
     },
     searchIcon:{
-        height: '32px',
-        width: '32px',
+        height: '30px',
+        width: '30px',
         color: '#444',
-        margin: 'auto 6px'
+        margin: 'auto 4px'
     },
     sortContainer:{
         display: 'inline-flex',
         float: 'right'
     },
     clearBtn:{
-        width: '44px',
-        height: '44px',
+        width: '42px',
+        height: '42px',
         margin: 'auto 2px',
         float: 'right'
     },
     clear:{
-        width: '28epx',
-        height: '28epx',
+        width: '28px',
+        height: '28px',
         color: '#444',
     },
     favouriteBtn:{
-        height: '52px',
-        width: '52px',
+        height: '44px',
+        width: '44px',
         margin: 'auto 8px'
+    },
+    iconBtn:{
+        width: '44px',
+        height: '44px'
     },
     favourite:{
         width: '30px',
@@ -74,8 +74,8 @@ const useStyles=makeStyles(theme=>({
     },
     sortButton:{
         float: 'right',
-        width: '52px',
-        height: '52px',
+        width: '48px',
+        height: '48px',
         margin: 'auto 0'
     },
     arrowIcon:{
@@ -83,8 +83,8 @@ const useStyles=makeStyles(theme=>({
         height: '28px',
     },
     sortIcon:{
-        width: '36px',
-        height: '36px',
+        width: '32px',
+        height: '32px',
         margin: '4px 10px'
     },
     sortItem:{
@@ -166,16 +166,16 @@ export const Quotes=props=>{
                                 style={{color: 'rgba(138, 46, 68, 0.95)'}}
                                 className={classes.favourite}/> : <FavoriteBorderIcon className={classes.favourite}/>}
                         </IconButton>
-                        <IconButton onClick={()=>reorder('desc')}>
+                        <IconButton onClick={()=>reorder('desc')} className={classes.iconBtn}>
                             <KeyboardArrowDownIcon className={classes.arrowIcon}/>
                         </IconButton>
-                        <IconButton onClick={()=>reorder('asc')}>
+                        <IconButton onClick={()=>reorder('asc')} className={classes.iconBtn}>
                             <KeyboardArrowUpIcon className={classes.arrowIcon}/>
                         </IconButton>
 
                         <IconButton
                             onClick={event=>setSortAnchor(event.currentTarget)}
-                            className={classes.sortButton}>
+                            className={classes.iconBtn}>
                             <SortIcon className={classes.sortIcon}/>
                         </IconButton>
 

@@ -27,7 +27,7 @@ const useStyles=makeStyles(theme=>({
     search:{
         display: 'inline-flex',
         backgroundColor: '#b3bcbf',
-        width: '320px',
+        width: '280px',
         borderRadius: '3px'
     },
     searchInput:{
@@ -69,8 +69,8 @@ const useStyles=makeStyles(theme=>({
     },
     sortButton:{
         float: 'right',
-        width: '52px',
-        height: '52px',
+        width: '50px',
+        height: '50px',
         margin: 'auto 0'
     },
     arrowIcon:{
@@ -119,7 +119,7 @@ export const Pages=props=>{
 
     const sortName=(order)=>{
         const sorted=[...pages].sort((a,b)=>{
-            
+
             if(a.title<b.title && order==='asc')
                 return -1
             if(a.title<b.title && order==='desc')
@@ -191,7 +191,7 @@ export const Pages=props=>{
                 </div>
             </div>
 
-            <Grid container spacing={4} className={classes.grid}>
+            <Grid container spacing={2} className={classes.grid}>
                 {pages.length && pages.map((page,i)=>
                     page.title.includes(filter.toLowerCase()) &&
                     ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&

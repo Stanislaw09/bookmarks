@@ -33,7 +33,7 @@ const useStyles=makeStyles(theme=>({
     card:{
         width: '70%',
         maxWidth: '1100px',
-        margin: '30px auto',
+        margin: '24px auto',
         [theme.breakpoints.down('sm')]:{
             width: '94%'
         }
@@ -48,49 +48,52 @@ const useStyles=makeStyles(theme=>({
         display: 'flex'
     },
     avatar:{
-        width: '40px',
-        height: '40px',
-        margin: '6px 8px'
+        width: '34px',
+        height: '34px',
+        margin: '4px 8px'
     },
     link:{
-        margin: '12px 20px',
-        fontSize: '20px',
+        margin: '8px 20px',
+        fontSize: '18px',
         display: 'flex',
         textDecoration: 'none',
         underline: 'none',
         color: '#7187ab'
     },
     date:{
-        margin: '12px 20px',
-        fontSize: '20px',
+        margin: '10px 20px',
+        fontSize: '17px',
         color: '#555'
+    },
+    menuBtn:{
+        padding: '6px 12px'
     },
     menuItem:{
         marginRight: '10px',
         color: '#444'
     },
+    menu:{
+        width: '170px'
+    },
     collapse:{
-        margin: '0  0 10px 16px',
         width: 'calc(100% - 68px)'
     },
     text:{
-        fontSize: '19px',
-        lineHeight: '1.8em',
-        padding: '10px 46px 10px 0'
+        fontSize: '16px',
+        lineHeight: '1.7em',
+        padding: '6px 26px 6px 0'
     },
-    expand:{
+    expandIcon:{
         padding: '10px',
-        margin: '2px',
-        height: '50px',
+        height: '38px',
         transform: 'rotate(180deg)',
         transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
         })
     },
-    expanded:{
+    expandedIcon:{
         padding: '10px',
-        margin: '2px',
-        height: '50px',
+        height: '38px',
         transform: 'rotate(0deg)',
         transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
@@ -107,9 +110,9 @@ const useStyles=makeStyles(theme=>({
         padding: '10px'
     },
     share:{
-        width: '50px',
-        height: '50px',
-        margin: '5px',
+        width: '30px',
+        height: '30px',
+        margin: '4px',
         borderRadius: '50%'
     }
 }))
@@ -145,7 +148,7 @@ export const QuoteView=props=>{
 
     return(
         <Card className={classes.card}>
-            <Paper className={classes.cardHeader} elevation={5}>
+            <Paper className={classes.cardHeader} elevation={2}>
                 <div className={classes.cardSubHeader}>
                     <Avatar src={props.quote.favIcon} className={classes.avatar}/>
 
@@ -155,10 +158,10 @@ export const QuoteView=props=>{
                         </Link>
                     </Typography>
 
-                    <Typography className={classes.date}>{date.toDateString()}</Typography>
+                    <Typography className={classes.date}>{date.toLocaleDateString()}</Typography>
                 </div>
 
-                <IconButton onClick={event=>setMenuAnchor(event.currentTarget)}>
+                <IconButton onClick={event=>setMenuAnchor(event.currentTarget)} className={classes.menuBtn}>
                     <MenuIcon className={classes.icons}/>
                 </IconButton>
 
@@ -249,12 +252,12 @@ export const QuoteView=props=>{
                 {props.quote.text.length>160 &&
                     <IconButton
                         onClick={()=>setShowText(prev=>!prev)}
-                        className={showText ? classes.expand : classes.expanded}>
+                        className={showText ? classes.expandIcon : classes.expandedIcon}>
                         <ExpandMoreIcon className={classes.icons}/>
                     </IconButton>
                 }
 
-                <Collapse in={showText} collapsedHeight={110} className={classes.collapse}>
+                <Collapse in={showText} collapsedHeight={92} className={classes.collapse}>
                     <Typography id='text' className={classes.text}>{props.quote.text}</Typography>
                 </Collapse>
             </div>

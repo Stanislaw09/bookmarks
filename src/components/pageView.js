@@ -40,7 +40,7 @@ const useStyles=makeStyles(theme=>({
         display: 'inline-flex',
         width: '100%',
         justifyContent: 'space-between',
-        marginBottom: '2px'
+        marginBottom: '-2px'
     },
     gridSubHeader:{
         display: 'flex'
@@ -52,14 +52,14 @@ const useStyles=makeStyles(theme=>({
     },
     link:{
         margin: '8px 2px',
-        fontSize: '16px',
+        fontSize: '14px',
         display: 'flex',
         textDecoration: 'none',
         underline: 'none',
         color: '#7187ab'
     },
     date:{
-        margin: 'auto 18px',
+        margin: 'auto 12px',
         color: '#555',
         fontSize: '13px',
         fontStyle: 'italic'
@@ -69,12 +69,13 @@ const useStyles=makeStyles(theme=>({
     },
     title:{
         margin: '4px 2px',
+        fontSize: '14px',
         color: '#494d5b',
         fontWeight: '600'
     },
     menuBtn:{
-        height: '52px',
-        width: '52px',
+        height: '48px',
+        width: '48px',
         margin: '6px 2px'
     },
     menuItem:{
@@ -82,8 +83,8 @@ const useStyles=makeStyles(theme=>({
         color: '#444'
     },
     menuIcon:{
-        width: '34px',
-        height: '34px'
+        width: '30px',
+        height: '30px'
     },
     shareContainers:{
         padding: '10px'
@@ -133,7 +134,7 @@ export const PageView=props=>{
     }
 
     return(
-        <Grid item xs={12} sm={6} md={4} className={classes.grid}>
+        <Grid item xs={6} sm={4} md={3} className={classes.grid}>
             <div className={classes.container}>
                 <Paper className={classes.gridHeader} elevation={5}>
                     <div className={classes.gridSubHeader}>
@@ -151,7 +152,7 @@ export const PageView=props=>{
                                     </Link>
                                 </Typography>
 
-                                <Typography className={classes.date}>{date.toDateString()}</Typography>
+                                <Typography className={classes.date}>{date.toLocaleDateString()}</Typography>
                             </div>
                         </div>
                     </div>

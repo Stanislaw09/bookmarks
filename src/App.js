@@ -1,90 +1,44 @@
 import React,{useState, useEffect} from 'react'
-import {Tabs, Tab, makeStyles} from '@material-ui/core'
-import {Quotes} from './components/quotes'
-import {Pages} from './components/pages'
+import {Switch, Route, useHistory} from 'react-router-dom'
+import {makeStyles, Button, Typography} from '@material-ui/core'
+import {Main} from './components/main.js'
 const firebase=require('firebase')
 
 const useStyles=makeStyles({
-    container:{
-        minWidth: '560px'
-    },
     header:{
-        backgroundColor: '#7e3477'
-    },
-    captionEnabled:{
-        color: '#fff',
         fontSize: '20px',
-        fontWeight: '500',
-        margin: '6px 20px'
+        margin: '12px',
+        color: '#ccc'
     },
-    captionDisabled:{
-        color: '#bdbdbd',
-        fontSize: '20px',
-        fontWeight: '500',
-        margin: '6px 20px'
+    linkBtn:{
+        margin: '12px'
     }
 })
 
 function App(){
-    const[quotes, setQuotes]=useState(undefined)
-    const[pages, setPages]=useState(undefined)
-    const[value, setValue]=useState(0)
+    const history=useHistory()
     const classes=useStyles()
 
-    useEffect(()=>{
-        firebase
-            .firestore()
-            .collection('quotes')
-            .onSnapshot(serverUpdate=>{
-                const _quotes=serverUpdate.docs.map(item=>{
-                    const data=item.data()
-                    data['id']=item.id
-                    return data
-                })
-                setQuotes(_quotes)
-            })
+     return(
+         <div>
+             <Switch>
+                 <Route exact path="/">
+                     <div>
+                         <Typography className={classes.header}>Bookmarks management</Typography>
 
-        firebase
-            .firestore()
-            .collection('pages')
-            .onSnapshot(serverUpdate=>{
-                const _pages=serverUpdate.docs.map(item=>{
-                    const data=item.data()
-                    data['id']=item.id
-                    return data
-                })
-                setPages(_pages)
-            })
-    },[])
-
-    const handleChange=(event, newValue)=>setValue(newValue)
-
-    const TabPanel=props=>{
-        return(
-            <div hidden={props.value!==props.index} role="tabpanel">
-                {props.children}
-            </div>
-        )
-    }
-
-     return (
-        <div className={classes.container}>
-            <Tabs centered onChange={handleChange} className={classes.header}>
-                <Tab
-                    label='Quotes'
-                    className={value===0 ? classes.captionEnabled : classes.captionDisabled}/>
-                <Tab label='Pages' className={value===1 ? classes.captionEnabled : classes.captionDisabled}/>
-            </Tabs>
-
-            <TabPanel value={value} index={0} className={classes.tabPanel}>
-                <Quotes quotes={quotes}/>
-            </TabPanel>
-
-            <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <Pages pages={pages}/>
-            </TabPanel>
-        </div>
+                         <Button
+                             variant='outlined'
+                             color='secondary'
+                             onClick={()=>history.push('/main')}
+                             className={classes.linkBtn}>Main View</Button>
+                     </div>
+                 </Route>
+                 <Route path="/main">
+                     <Main/>
+                 </Route>
+             </Switch>
+         </div>
      )
 }
 
-export default App;
+export default App

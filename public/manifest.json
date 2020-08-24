@@ -1,9 +1,14 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "short_name": "Bookmarks",
+  "name": "Bookmarks React Extension",
+  "version": "1.0",
+  "icons":{
+    "128": "icon.png"
+   },
+  "manifest_version": 2,
+  "browser_action": {
+        "default_popup": "index.html",
+        "default_icon": "icon.png"
+    },
+    "content_security_policy": "script-src 'self' 'sha256-18WTNqymwdN6dGush57ZpwUVzfmYQAJCMWoRNCLaK1M='; object-src 'self'",  "permissions": []
 }
