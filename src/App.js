@@ -31,6 +31,8 @@ function App(){
                              color='secondary'
                              onClick={()=>history.push('/main')}
                              className={classes.linkBtn}>Main View</Button>
+
+                         <Typography id='saveBtn'>Save Page</Typography>
                      </div>
                  </Route>
                  <Route path="/main">

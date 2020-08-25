@@ -1,14 +1,35 @@
 {
-  "short_name": "Bookmarks",
-  "name": "Bookmarks React Extension",
-  "version": "1.0",
-  "icons":{
-    "128": "icon.png"
-   },
-  "manifest_version": 2,
-  "browser_action": {
+    "manifest_version": 2,
+    "short_name": "Bookmarks",
+    "name": "Bookmarks React Extension",
+    "version": "1.0",
+    "icons":{
+      "128": "icon.png"
+    },
+    "browser_action": {
         "default_popup": "index.html",
         "default_icon": "icon.png"
     },
-    "content_security_policy": "script-src 'self' 'sha256-18WTNqymwdN6dGush57ZpwUVzfmYQAJCMWoRNCLaK1M='; object-src 'self'",  "permissions": []
+    "background":{
+        "page":"background.html"
+    },
+    "content_scripts":[{
+        "matches":["<all_urls>"],
+        "js":["content.js"]
+    }],
+    "permissions":[
+        "contextMenus",
+        "storage",
+        "tabs",
+        "<all_urls>"
+    ],
+    "content_security_policy": "script-src 'self' 'sha256-18WTNqymwdN6dGush57ZpwUVzfmYQAJCMWoRNCLaK1M=' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
+    "oauth2":{
+          "client_id":"1:819773771295:web:54c4b62f06e1473ec00f2a",
+          "scopes":[
+            "https://www.googleapis.com/auth/userinfo.email",
+            "https://www.googleapis.com/auth/userinfo.profile"
+          ]
+    },
+    "incognito": "split"
 }

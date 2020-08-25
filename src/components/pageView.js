@@ -43,7 +43,8 @@ const useStyles=makeStyles(theme=>({
         marginBottom: '-2px'
     },
     gridSubHeader:{
-        display: 'flex'
+        display: 'flex',
+        width: 'calc(100% - 50px)'
     },
     avatar:{
         width: '30px',
