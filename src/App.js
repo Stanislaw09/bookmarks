@@ -12,6 +12,9 @@ const useStyles=makeStyles({
     },
     linkBtn:{
         margin: '12px'
+    },
+    saveBtn:{
+        margin: '0 4px'
     }
 })
 
@@ -27,12 +30,14 @@ function App(){
                          <Typography className={classes.header}>Bookmarks management</Typography>
 
                          <Button
-                             variant='outlined'
+                             color='secondary'
+                             id='saveBtn'
+                             className={classes.saveBtn}>Save Page</Button>
+
+                         <Button
                              color='secondary'
                              onClick={()=>history.push('/main')}
                              className={classes.linkBtn}>Main View</Button>
-
-                         <Typography id='saveBtn'>Save Page</Typography>
                      </div>
                  </Route>
                  <Route path="/main">

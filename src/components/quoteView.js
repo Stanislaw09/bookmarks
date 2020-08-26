@@ -33,16 +33,15 @@ const useStyles=makeStyles(theme=>({
     card:{
         width: '70%',
         maxWidth: '1100px',
-        margin: '24px auto',
+        margin: '20px auto',
         [theme.breakpoints.down('sm')]:{
-            width: '94%'
+            width: '98%'
         }
     },
     cardHeader:{
         display: 'inline-flex',
         width: '100%',
-        justifyContent: 'space-between',
-        marginBottom: '6px'
+        justifyContent: 'space-between'
     },
     cardSubHeader:{
         display: 'flex'
@@ -73,15 +72,21 @@ const useStyles=makeStyles(theme=>({
         color: '#444'
     },
     menu:{
-        width: '170px'
+        width: '166px'
     },
-    collapse:{
+    collapseLong:{
         width: 'calc(100% - 68px)'
+    },
+    collapseShort:{
+        width: 'calc(100% - 68px)',
+        marginLeft: '50px'
     },
     text:{
         fontSize: '16px',
+        fontStyle: 'italic',
         lineHeight: '1.7em',
-        padding: '6px 26px 6px 0'
+        padding: '6px 26px 6px 0',
+        wordWrap: 'break-word'
     },
     expandIcon:{
         padding: '10px',
@@ -148,7 +153,7 @@ export const QuoteView=props=>{
 
     return(
         <Card className={classes.card}>
-            <Paper className={classes.cardHeader} elevation={2}>
+            <Paper className={classes.cardHeader} elevation={0}>
                 <div className={classes.cardSubHeader}>
                     <Avatar src={props.quote.favIcon} className={classes.avatar}/>
 
@@ -244,12 +249,11 @@ export const QuoteView=props=>{
                             </EmailShareButton>
                         </div>
                     </Collapse>
-
                 </Menu>
             </Paper>
 
             <div className={classes.cardContent}>
-                {props.quote.text.length>160 &&
+                {props.quote.text.length>110 &&
                     <IconButton
                         onClick={()=>setShowText(prev=>!prev)}
                         className={showText ? classes.expandIcon : classes.expandedIcon}>
@@ -257,7 +261,7 @@ export const QuoteView=props=>{
                     </IconButton>
                 }
 
-                <Collapse in={showText} collapsedHeight={92} className={classes.collapse}>
+                <Collapse in={showText} collapsedHeight={92} className={props.quote.text.length>110 ? classes.collapseLong : classes.collapseShort}>
                     <Typography id='text' className={classes.text}>{props.quote.text}</Typography>
                 </Collapse>
             </div>

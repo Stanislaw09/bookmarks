@@ -46,13 +46,16 @@ const useStyles=makeStyles(theme=>({
         display: 'flex',
         width: 'calc(100% - 50px)'
     },
+    headerContent:{
+        width: '83%'
+    },
     avatar:{
         width: '30px',
         height: '30px',
-        margin: '8px'
+        margin: '6px'
     },
     link:{
-        margin: '8px 2px',
+        margin: '0 4px 0 0',
         fontSize: '14px',
         display: 'flex',
         textDecoration: 'none',
@@ -60,7 +63,7 @@ const useStyles=makeStyles(theme=>({
         color: '#7187ab'
     },
     date:{
-        margin: 'auto 12px',
+        margin: 'auto 10px',
         color: '#555',
         fontSize: '13px',
         fontStyle: 'italic'
@@ -70,16 +73,20 @@ const useStyles=makeStyles(theme=>({
     },
     title:{
         margin: '4px 2px',
-        fontSize: '14px',
+        fontSize: '12px',
         color: '#494d5b',
-        fontWeight: '600'
+        fontWeight: '600',
+        wordWrap: 'break-word'
     },
     menuBtn:{
-        height: '48px',
-        width: '48px',
-        margin: '6px 2px'
+        height: '46px',
+        width: '46px',
+        margin: '0 2px'
     },
-    menuItem:{
+    menu:{
+        width: '166px'
+    },
+    subMenuIcon:{
         marginRight: '10px',
         color: '#444'
     },
@@ -91,18 +98,19 @@ const useStyles=makeStyles(theme=>({
         padding: '10px'
     },
     share:{
-        width: '50px',
-        height: '50px',
-        margin: '5px',
+        width: '30px',
+        height: '30px',
+        margin: '4px',
         borderRadius: '50%'
     },
     imgContainer:{
         overflow: 'hidden',
         width: '100%',
-        maxHeight: '320px'
+        maxHeight: '260px'
     },
     image:{
-        width: '100%'
+        width: '100%',
+        borderRadius: '2px'
     }
 }))
 
@@ -141,9 +149,9 @@ export const PageView=props=>{
                     <div className={classes.gridSubHeader}>
                         <Avatar src={props.page.favIcon} className={classes.avatar}/>
 
-                        <div>
-                            {props.page.title.length>60 ?
-                                <Typography className={classes.title}>{props.page.title.slice(0, 60)}...</Typography> :
+                        <div className={classes.headerContent}>
+                            {props.page.title.length>46 ?
+                                <Typography className={classes.title}>{props.page.title.slice(0, 46)}...</Typography> :
                                 <Typography className={classes.title}>{props.page.title}</Typography>}
 
                             <div className={classes.headerData}>
@@ -169,20 +177,20 @@ export const PageView=props=>{
                         onClose={()=>setMenuAnchor(false)}
                         className={classes.menu}>
 
-                        <MenuItem onClick={handleFavourite}>
+                        <MenuItem onClick={handleFavourite} className={classes.menuItem}>
                             {props.page.favourite ?
                                 <FavoriteIcon
-                                    style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.menuItem}/> :
-                                    <FavoriteBorderIcon className={classes.menuItem}/>
+                                    style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.subMenuIcon}/> :
+                                    <FavoriteBorderIcon className={classes.subMenuIcon}/>
                             }Favourite
                         </MenuItem>
 
-                        <MenuItem onClick={handleDelete}>
-                            <DeleteIcon className={classes.menuItem}/>Delete
+                        <MenuItem onClick={handleDelete} className={classes.menuItem}>
+                            <DeleteIcon className={classes.subMenuIcon}/>Delete
                         </MenuItem>
 
-                        <MenuItem onClick={()=>setShareMenu(prev=>!prev)}>
-                            <ShareIcon className={classes.menuItem}/>Share
+                        <MenuItem onClick={()=>setShareMenu(prev=>!prev)} className={classes.menuItem}>
+                            <ShareIcon className={classes.subMenuIcon}/>Share
                         </MenuItem>
 
                         <Collapse in={shareMenu}>
@@ -242,7 +250,9 @@ export const PageView=props=>{
                 </Paper>
 
                 <div className={classes.imgContainer}>
-                    <img src={props.page.image} className={classes.image}/>
+                    <a href={props.page.url} target='_blank'>
+                        <img src={props.page.image} className={classes.image}/>
+                    </a>
                 </div>
             </div>
 

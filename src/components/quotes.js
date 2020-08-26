@@ -19,8 +19,7 @@ const useStyles=makeStyles(theme=>({
         margin: '0 0 20px'
     },
     nav:{
-        backgroundColor: '#ddd',
-        padding: '2px 10px'
+        backgroundColor: '#ddd'
     },
     subNav:{
         margin: '0 auto',
@@ -69,14 +68,13 @@ const useStyles=makeStyles(theme=>({
         height: '44px'
     },
     favourite:{
-        width: '30px',
-        height: '30px'
+        width: '28px',
+        height: '28px'
     },
     sortButton:{
         float: 'right',
         width: '48px',
-        height: '48px',
-        margin: 'auto 0'
+        height: '48px'
     },
     arrowIcon:{
         width: '28px',
@@ -151,7 +149,7 @@ export const Quotes=props=>{
                     <div className={classes.search}>
                         <SearchIcon className={classes.searchIcon}/>
                         <InputBase
-                            placeholder='Search in domain...'
+                            placeholder='Search in quote...'
                             value={filter}
                             onChange={e=>setFilter(e.target.value)}
                             className={classes.searchInput}/>
@@ -196,7 +194,7 @@ export const Quotes=props=>{
             </div>
 
             {quotes.length && quotes.map((quote,i)=>
-                quote.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0].includes(filter.toLowerCase()) &&
+                quote.text.toLowerCase().includes(filter.toLowerCase()) &&
                 ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
                     <QuoteView
                         key={i}

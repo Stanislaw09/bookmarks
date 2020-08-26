@@ -8,7 +8,7 @@ const firebase=require('firebase')
 
 const useStyles=makeStyles({
     container:{
-        minWidth: '560px',
+        minWidth: '580px',
         minHeight: '800px'
     },
     header:{
@@ -20,7 +20,12 @@ const useStyles=makeStyles({
     },
     arrowBack:{
         marginLeft: '12px',
-        color: '#ddd'
+        color: '#ddd',
+        padding: '4px'
+    },
+    arrowBackIcon:{
+        width: '30px',
+        height: '30px'
     },
     tabs:{
         margin: '0 auto'
@@ -29,13 +34,13 @@ const useStyles=makeStyles({
         color: '#fff',
         fontSize: '19px',
         fontWeight: '500',
-        margin: '2px 8px'
+        margin: '0 8px'
     },
     captionDisabled:{
         color: '#bdbdbd',
         fontSize: '19px',
         fontWeight: '500',
-        margin: '2px 8px'
+        margin: '0 8px'
     }
 })
 
@@ -86,7 +91,7 @@ export const Main=()=>{
         <div className={classes.container}>
             <div className={classes.header}>
                 <IconButton onClick={()=>history.push('/')} className={classes.arrowBack}>
-                    <ArrowBackIcon/>
+                    <ArrowBackIcon className={classes.arrowBackIcon}/>
                 </IconButton>
 
                 <Tabs centered onChange={handleChange} className={classes.tabs}>

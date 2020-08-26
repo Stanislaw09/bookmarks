@@ -21,8 +21,10 @@ const useStyles=makeStyles(theme=>({
         width: '100%'
     },
     nav:{
-        backgroundColor: '#ddd',
-        padding: '6px 22px'
+        backgroundColor: '#ddd'
+    },
+    subNav:{
+        margin: '0 auto',
     },
     search:{
         display: 'inline-flex',
@@ -32,54 +34,57 @@ const useStyles=makeStyles(theme=>({
     },
     searchInput:{
         width: '250px',
-        height: '40px',
-        fontSize: '22px',
+        height: '36px',
+        fontSize: '18px',
         padding: '0 10px',
         margin: '4px 4px',
     },
     searchIcon:{
-        height: '32px',
-        width: '32px',
+        height: '30px',
+        width: '30px',
         color: '#444',
-        margin: 'auto 6px'
+        margin: 'auto 4px'
     },
     sortContainer:{
         display: 'inline-flex',
         float: 'right'
     },
     clearBtn:{
-        width: '44px',
-        height: '44px',
+        width: '42px',
+        height: '42px',
         margin: 'auto 2px',
         float: 'right'
     },
     clear:{
-        width: '28epx',
-        height: '28epx',
+        width: '28px',
+        height: '28px',
         color: '#444',
     },
     favouriteBtn:{
-        height: '52px',
-        width: '52px',
+        height: '44px',
+        width: '44px',
         margin: 'auto 8px'
     },
+    iconBtn:{
+        width: '44px',
+        height: '44px'
+    },
     favourite:{
-        width: '30px',
-        height: '30px'
+        width: '28px',
+        height: '28px'
     },
     sortButton:{
         float: 'right',
-        width: '50px',
-        height: '50px',
-        margin: 'auto 0'
+        width: '48px',
+        height: '48px'
     },
     arrowIcon:{
         width: '28px',
         height: '28px',
     },
     sortIcon:{
-        width: '36px',
-        height: '36px',
+        width: '32px',
+        height: '32px',
         margin: '4px 10px'
     },
     sortItem:{
@@ -88,7 +93,7 @@ const useStyles=makeStyles(theme=>({
         color: '#555'
     },
     grid:{
-        padding: '16px 8px'
+        padding: '8px'
     }
 }))
 
@@ -143,7 +148,7 @@ export const Pages=props=>{
     return(
         <div className={classes.container}>
             <div className={classes.nav}>
-                <div>
+                <div className={classes.subNav}>
                     <div className={classes.search}>
                         <SearchIcon className={classes.searchIcon}/>
                         <InputBase
@@ -162,16 +167,16 @@ export const Pages=props=>{
                                 style={{color: 'rgba(138, 46, 68, 0.95)'}}
                                 className={classes.favourite}/> : <FavoriteBorderIcon className={classes.favourite}/>}
                         </IconButton>
-                        <IconButton onClick={()=>reorder('desc')}>
+                        <IconButton onClick={()=>reorder('desc')} className={classes.iconBtn}>
                             <KeyboardArrowDownIcon className={classes.arrowIcon}/>
                         </IconButton>
-                        <IconButton onClick={()=>reorder('asc')}>
+                        <IconButton onClick={()=>reorder('asc')} className={classes.iconBtn}>
                             <KeyboardArrowUpIcon className={classes.arrowIcon}/>
                         </IconButton>
 
                         <IconButton
                             onClick={event=>setSortAnchor(event.currentTarget)}
-                            className={classes.sortButton}>
+                            className={classes.iconBtn}>
                             <SortIcon className={classes.sortIcon}/>
                         </IconButton>
 
@@ -191,9 +196,9 @@ export const Pages=props=>{
                 </div>
             </div>
 
-            <Grid container spacing={2} className={classes.grid}>
+            <Grid container spacing={1} className={classes.grid}>
                 {pages.length && pages.map((page,i)=>
-                    page.title.includes(filter.toLowerCase()) &&
+                    page.title.toLowerCase().includes(filter.toLowerCase()) &&
                     ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
                         <PageView
                             key={i}
