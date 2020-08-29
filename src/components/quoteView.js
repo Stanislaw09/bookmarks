@@ -33,7 +33,7 @@ const useStyles=makeStyles(theme=>({
     card:{
         width: '70%',
         maxWidth: '1100px',
-        margin: '20px auto',
+        margin: '16px auto',
         [theme.breakpoints.down('sm')]:{
             width: '98%'
         }
@@ -65,7 +65,8 @@ const useStyles=makeStyles(theme=>({
         color: '#555'
     },
     menuBtn:{
-        padding: '6px 12px'
+        width: '46px',
+        height: '46px'
     },
     menuItem:{
         marginRight: '10px',
@@ -89,16 +90,18 @@ const useStyles=makeStyles(theme=>({
         wordWrap: 'break-word'
     },
     expandIcon:{
-        padding: '10px',
-        height: '38px',
+        width: '42px',
+        height: '42px',
+        padding: '0',
         transform: 'rotate(180deg)',
         transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,
         })
     },
     expandedIcon:{
-        padding: '10px',
-        height: '38px',
+        width: '42px',
+        height: '42px',
+        padding: '0',
         transform: 'rotate(0deg)',
         transition: theme.transitions.create('transform', {
             duration: theme.transitions.duration.shortest,

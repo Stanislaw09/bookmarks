@@ -109,7 +109,7 @@ export const Pages=props=>{
         props.pages && setPages(props.pages)
     },[props])
 
-    const sortDate=(order)=>{
+    const sortDate=order=>{
         const sorted=[...pages].sort((a,b)=>{
             if(order==='asc')
                 return a.date.seconds-b.date.seconds
@@ -122,7 +122,7 @@ export const Pages=props=>{
         setSortAnchor(null)
     }
 
-    const sortName=(order)=>{
+    const sortName=order=>{
         const sorted=[...pages].sort((a,b)=>{
 
             if(a.title<b.title && order==='asc')
@@ -185,7 +185,7 @@ export const Pages=props=>{
                             keepMounted
                             anchorEl={sortAnchor}
                             onClose={()=>setSortAnchor(false)}>
-                            <MenuItem onClick={()=>sortDate('asc')}>
+                            <MenuItem onClick={()=>sortDate('desc')}>
                                 <Typography className={classes.sortItem}>Date</Typography>
                             </MenuItem>
                             <MenuItem onClick={()=>sortName('asc')}>

@@ -15,13 +15,16 @@
     },
     "content_scripts":[{
         "matches":["<all_urls>"],
-        "js":["content.js"]
+        "js":["content.js"],
+        "run_at": "document_end"
     }],
     "permissions":[
         "contextMenus",
         "storage",
         "tabs",
-        "<all_urls>"
+        "<all_urls>",
+        "identity",
+        "identity.email"
     ],
     "content_security_policy": "script-src 'self' 'sha256-18WTNqymwdN6dGush57ZpwUVzfmYQAJCMWoRNCLaK1M=' https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'",
     "oauth2":{

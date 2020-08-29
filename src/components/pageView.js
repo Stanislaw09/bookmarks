@@ -80,8 +80,7 @@ const useStyles=makeStyles(theme=>({
     },
     menuBtn:{
         height: '46px',
-        width: '46px',
-        margin: '0 2px'
+        width: '46px'
     },
     menu:{
         width: '166px'
@@ -106,7 +105,7 @@ const useStyles=makeStyles(theme=>({
     imgContainer:{
         overflow: 'hidden',
         width: '100%',
-        maxHeight: '260px'
+        maxHeight: '250px'
     },
     image:{
         width: '100%',

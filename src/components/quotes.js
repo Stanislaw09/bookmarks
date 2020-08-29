@@ -182,7 +182,7 @@ export const Quotes=props=>{
                             keepMounted
                             anchorEl={sortAnchor}
                             onClose={()=>setSortAnchor(false)}>
-                            <MenuItem onClick={()=>sortDate('asc')}>
+                            <MenuItem onClick={()=>sortDate('desc')}>
                                 <Typography className={classes.sortItem}>Date</Typography>
                             </MenuItem>
                             <MenuItem onClick={()=>sortName('asc')}>

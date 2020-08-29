@@ -18,10 +18,12 @@ const useStyles=makeStyles({
         top: '0',
         zIndex: '1000'
     },
-    arrowBack:{
+    arrowBackBtn:{
         marginLeft: '12px',
         color: '#ddd',
-        padding: '4px'
+        padding: '4px',
+        width: '48px',
+        height: '48px'
     },
     arrowBackIcon:{
         width: '30px',
@@ -90,7 +92,7 @@ export const Main=()=>{
      return(
         <div className={classes.container}>
             <div className={classes.header}>
-                <IconButton onClick={()=>history.push('/')} className={classes.arrowBack}>
+                <IconButton onClick={()=>history.push('/')} className={classes.arrowBackBtn}>
                     <ArrowBackIcon className={classes.arrowBackIcon}/>
                 </IconButton>
 

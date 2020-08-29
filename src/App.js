@@ -18,9 +18,11 @@ const useStyles=makeStyles({
     }
 })
 
-function App(){
+function App(props){
     const history=useHistory()
     const classes=useStyles()
+
+    console.log(props.data);
 
      return(
          <div>

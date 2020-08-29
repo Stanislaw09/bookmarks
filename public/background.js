@@ -14,6 +14,15 @@ document.addEventListener("DOMContentLoaded", event=>{
       date: {}
   })
 
+  chrome.identity.getProfileUserInfo(user=>{
+      chrome.storage.sync.set({
+          userId: user.id,
+          userMail: user.email
+      })
+  })
+
+
+
   const app=firebase.initializeApp({
       apiKey: "AIzaSyBN4OxyFPnGpYmUbrpZgbBsop79KccRgXI",
       authDomain: "quote-7cbcd.firebaseapp.com",
