@@ -198,7 +198,8 @@ export const Quotes=props=>{
                 ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
                     <QuoteView
                         key={i}
-                        quote={quote}/>
+                        quote={quote}
+                        id={props.id}/>
             )}
 
         </div>

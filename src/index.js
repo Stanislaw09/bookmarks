@@ -1,5 +1,4 @@
-/*global chrome*/
-import React from 'react'
+import React, {useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import {BrowserRouter} from 'react-router-dom'
@@ -17,10 +16,8 @@ firebase.initializeApp({
     appId: "1:819773771295:web:54c4b62f06e1473ec00f2a"
 })
 
-chrome.storage.sync.get(null, data=>{
-    ReactDOM.render(
-        <BrowserRouter basename={window.location.pathname || ''}>
-            <App data={data}/>
-        </BrowserRouter>,document.getElementById('root')
-    )
-})
+ReactDOM.render(
+    <BrowserRouter basename={window.location.pathname || ''}>
+        <App/>
+    </BrowserRouter>,document.getElementById('root')
+)

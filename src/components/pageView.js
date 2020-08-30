@@ -133,11 +133,16 @@ export const PageView=props=>{
     }
 
     const handleDelete=event=>{
-        firebase.firestore().collection('pages').doc(props.page.id).delete().then(()=>{
-            console.log("deleted")
-        }).catch(error=>{
-            console.error("Shit happens:",error)
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+            let pages=data.pages.filter(item=>item.url!=props.page.url)
+
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: data.quotes,
+                pages: pages
+            })
         })
+
         setMenuAnchor(null)
     }
 

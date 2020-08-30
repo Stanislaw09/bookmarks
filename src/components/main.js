@@ -1,3 +1,4 @@
+/*global chrome*/
 import React,{useState, useEffect} from 'react'
 import {Tabs, Tab, makeStyles, IconButton} from '@material-ui/core'
 import {useHistory} from 'react-router-dom'
@@ -51,32 +52,24 @@ export const Main=()=>{
     const[quotes, setQuotes]=useState(undefined)
     const[pages, setPages]=useState(undefined)
     const[value, setValue]=useState(0)
+    const[id, setId]=useState('')
     const classes=useStyles()
 
     useEffect(()=>{
-        firebase
-            .firestore()
-            .collection('quotes')
-            .onSnapshot(serverUpdate=>{
-                const _quotes=serverUpdate.docs.map(item=>{
-                    const data=item.data()
-                    data['id']=item.id
-                    return data
-                })
-                setQuotes(_quotes)
-            })
+        chrome.storage.sync.get(null, data=>{
+            setId(data.userId)
 
-        firebase
-            .firestore()
-            .collection('pages')
-            .onSnapshot(serverUpdate=>{
-                const _pages=serverUpdate.docs.map(item=>{
-                    const data=item.data()
-                    data['id']=item.id
-                    return data
+            firebase.firestore().collection('users').onSnapshot(serverUpdate=>{
+                    serverUpdate.docs.map(item=>{
+                        const user=item.data()
+
+                        if(data.userId==item.id){
+                            setPages(user.pages)
+                            setQuotes(user.quotes)
+                        }
+                    })
                 })
-                setPages(_pages)
-            })
+        })
     },[])
 
     const handleChange=(event, newValue)=>setValue(newValue)
@@ -105,11 +98,11 @@ export const Main=()=>{
             </div>
 
             <TabPanel value={value} index={0} className={classes.tabPanel}>
-                <Quotes quotes={quotes}/>
+                <Quotes quotes={quotes} id={id}/>
             </TabPanel>
 
             <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <Pages pages={pages}/>
+                <Pages pages={pages} id={id}/>
             </TabPanel>
         </div>
      )

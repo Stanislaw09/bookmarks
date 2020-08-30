@@ -134,16 +134,21 @@ export const QuoteView=props=>{
     date.setSeconds(props.quote.date.seconds)
 
     const handleDelete=event=>{
-        firebase.firestore().collection('quotes').doc(props.quote.id).delete().then(()=>{
-            console.log("deleted")
-        }).catch(error=>{
-            console.error("Shit happens:",error)
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+            let quotes=data.quotes.filter(item=>item.text!=props.quote.text || item.url!=props.quote.url)
+
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: quotes,
+                pages: data.pages
+            })
         })
+
         setMenuAnchor(null)
     }
 
     const handleFavourite=()=>{
-        firebase.firestore().collection('quotes').doc(props.quote.id).set({
+        firebase.firestore().collection('quotes').doc(props.id).set({
             favourite: !props.quote.favourite,
             url: props.quote.url,
             date: props.quote.date,

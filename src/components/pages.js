@@ -202,7 +202,8 @@ export const Pages=props=>{
                     ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
                         <PageView
                             key={i}
-                            page={page}/>
+                            page={page}
+                            id={props.id}/>
                 )}
             </Grid>
 

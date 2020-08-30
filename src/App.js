@@ -18,11 +18,9 @@ const useStyles=makeStyles({
     }
 })
 
-function App(props){
+function App(){
     const history=useHistory()
     const classes=useStyles()
-
-    console.log(props.data);
 
      return(
          <div>
@@ -42,6 +40,7 @@ function App(props){
                              className={classes.linkBtn}>Main View</Button>
                      </div>
                  </Route>
+
                  <Route path="/main">
                      <Main/>
                  </Route>
