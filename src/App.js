@@ -2,7 +2,6 @@ import React,{useState, useEffect} from 'react'
 import {Switch, Route, useHistory} from 'react-router-dom'
 import {makeStyles, Button, Typography} from '@material-ui/core'
 import {Main} from './components/main.js'
-const firebase=require('firebase')
 
 const useStyles=makeStyles({
     header:{
@@ -41,7 +40,7 @@ function App(){
                      </div>
                  </Route>
 
-                 <Route path="/main">
+                 <Route exact path="/main">
                      <Main/>
                  </Route>
              </Switch>

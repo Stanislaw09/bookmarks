@@ -93,7 +93,9 @@ export const Main=()=>{
                     <Tab
                         label='Quotes'
                         className={value===0 ? classes.captionEnabled : classes.captionDisabled}/>
-                    <Tab label='Pages' className={value===1 ? classes.captionEnabled : classes.captionDisabled}/>
+                    <Tab
+                        label='Pages'
+                        className={value===1 ? classes.captionEnabled : classes.captionDisabled}/>
                 </Tabs>
             </div>
 

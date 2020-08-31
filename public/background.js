@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", event=>{
       favIcon: '',
       title: '',
       date: {}
-  })
+    })
 
   const app=firebase.initializeApp({
       apiKey: "AIzaSyBN4OxyFPnGpYmUbrpZgbBsop79KccRgXI",

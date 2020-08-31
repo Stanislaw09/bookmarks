@@ -151,11 +151,13 @@ export const Pages=props=>{
                 <div className={classes.subNav}>
                     <div className={classes.search}>
                         <SearchIcon className={classes.searchIcon}/>
+
                         <InputBase
                             placeholder='Search in title...'
                             value={filter}
                             onChange={e=>setFilter(e.target.value)}
                             className={classes.searchInput}/>
+
                         <IconButton onClick={()=>setFilter('')} className={classes.clearBtn}>
                             <CloseIcon className={classes.clear}/>
                         </IconButton>
@@ -163,13 +165,19 @@ export const Pages=props=>{
 
                     <div className={classes.sortContainer}>
                         <IconButton onClick={()=>setFavouriteFilter(prev=>!prev)} className={classes.favouriteBtn}>
-                            {favouriteFilter ? <FavoriteIcon
-                                style={{color: 'rgba(138, 46, 68, 0.95)'}}
-                                className={classes.favourite}/> : <FavoriteBorderIcon className={classes.favourite}/>}
+                            {
+                                favouriteFilter ?
+                                    <FavoriteIcon
+                                        style={{color: 'rgba(138, 46, 68, 0.95)'}}
+                                        className={classes.favourite}/> :
+                                        <FavoriteBorderIcon className={classes.favourite}/>
+                            }
                         </IconButton>
+
                         <IconButton onClick={()=>reorder('desc')} className={classes.iconBtn}>
                             <KeyboardArrowDownIcon className={classes.arrowIcon}/>
                         </IconButton>
+
                         <IconButton onClick={()=>reorder('asc')} className={classes.iconBtn}>
                             <KeyboardArrowUpIcon className={classes.arrowIcon}/>
                         </IconButton>
@@ -188,6 +196,7 @@ export const Pages=props=>{
                             <MenuItem onClick={()=>sortDate('desc')}>
                                 <Typography className={classes.sortItem}>Date</Typography>
                             </MenuItem>
+
                             <MenuItem onClick={()=>sortName('asc')}>
                                 <Typography className={classes.sortItem}>Name</Typography>
                             </MenuItem>
@@ -206,7 +215,6 @@ export const Pages=props=>{
                             id={props.id}/>
                 )}
             </Grid>
-
         </div>
     )
 }

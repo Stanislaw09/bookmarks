@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", ()=>{
-
+    
     document.getElementById('saveBtn').addEventListener('click', ()=>{
         chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs=>{
 

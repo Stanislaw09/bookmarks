@@ -120,22 +120,10 @@ export const PageView=props=>{
     const date=new Date(1970, 0, 1)
     date.setSeconds(props.page.date.seconds)
 
-    const handleFavourite=()=>{
-        firebase.firestore().collection('pages').doc(props.page.id).set({
-            date: props.page.date,
-            favIcon: props.page.favIcon,
-            favourite: !props.page.favourite,
-            image: props.page.image,
-            title: props.page.title,
-            url: props.page.url
-        })
-        setMenuAnchor(null)
-    }
-
-    const handleDelete=event=>{
+    const handleDelete=()=>{
         firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
             let data=doc.data()
-            let pages=data.pages.filter(item=>item.url!=props.page.url)
+            let pages=data.pages.filter(item=>item.url!=props.page.url || item.date.seconds!=props.page.date.seconds)
 
             firebase.firestore().collection("users").doc(props.id).set({
                 quotes: data.quotes,
@@ -143,6 +131,30 @@ export const PageView=props=>{
             })
         })
 
+        setMenuAnchor(null)
+    }
+
+    const handleFavourite=()=>{         firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+            let pages=data.pages.map(item=>{
+                if(item.url==props.page.url && item.date.seconds==props.page.date.seconds)
+                    return {
+                        date: props.page.date,
+                        favIcon: props.page.favIcon,
+                        favourite: !props.page.favourite,
+                        image: props.page.image,
+                        title: props.page.title,
+                        url: props.page.url
+                    }
+                else
+                    return item
+                })
+
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: data.quotes,
+                pages: pages
+            })
+        })
         setMenuAnchor(null)
     }
 
@@ -154,9 +166,10 @@ export const PageView=props=>{
                         <Avatar src={props.page.favIcon} className={classes.avatar}/>
 
                         <div className={classes.headerContent}>
-                            {props.page.title.length>46 ?
-                                <Typography className={classes.title}>{props.page.title.slice(0, 46)}...</Typography> :
-                                <Typography className={classes.title}>{props.page.title}</Typography>}
+                            {
+                                props.page.title.length>46 ?
+                                    <Typography className={classes.title}>{props.page.title.slice(0, 46)}...</Typography> :
+                                    <Typography className={classes.title}>{props.page.title}</Typography>}
 
                             <div className={classes.headerData}>
                                 <Typography>

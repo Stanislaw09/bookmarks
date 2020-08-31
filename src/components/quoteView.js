@@ -133,7 +133,7 @@ export const QuoteView=props=>{
     const date=new Date(1970, 0, 1)
     date.setSeconds(props.quote.date.seconds)
 
-    const handleDelete=event=>{
+    const handleDelete=()=>{
         firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
             let data=doc.data()
             let quotes=data.quotes.filter(item=>item.text!=props.quote.text || item.url!=props.quote.url)
@@ -147,15 +147,26 @@ export const QuoteView=props=>{
         setMenuAnchor(null)
     }
 
-    const handleFavourite=()=>{
-        firebase.firestore().collection('quotes').doc(props.id).set({
-            favourite: !props.quote.favourite,
-            url: props.quote.url,
-            date: props.quote.date,
-            favIcon: props.quote.favIcon,
-            text: props.quote.text
-        })
+    const handleFavourite=()=>{         firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+            let quotes=data.quotes.map(item=>{
+                if(item.text==props.quote.text && item.date.seconds==props.quote.date.seconds)
+                    return {
+                        date: props.quote.date,
+                        favIcon: props.quote.favIcon,
+                        favourite: !props.quote.favourite,
+                        text: props.quote.text,
+                        url: props.quote.url
+                    }
+                else
+                    return item
+                })
 
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: quotes,
+                pages: data.pages
+            })
+        })
         setMenuAnchor(null)
     }
 
@@ -261,7 +272,8 @@ export const QuoteView=props=>{
             </Paper>
 
             <div className={classes.cardContent}>
-                {props.quote.text.length>110 &&
+                {
+                    props.quote.text.length>110 &&
                     <IconButton
                         onClick={()=>setShowText(prev=>!prev)}
                         className={showText ? classes.expandIcon : classes.expandedIcon}>
@@ -269,7 +281,10 @@ export const QuoteView=props=>{
                     </IconButton>
                 }
 
-                <Collapse in={showText} collapsedHeight={92} className={props.quote.text.length>110 ? classes.collapseLong : classes.collapseShort}>
+                <Collapse
+                    in={showText}
+                    collapsedHeight={92}
+                    className={props.quote.text.length>110 ? classes.collapseLong : classes.collapseShort}>
                     <Typography id='text' className={classes.text}>{props.quote.text}</Typography>
                 </Collapse>
             </div>
