@@ -51,6 +51,8 @@ export const Main=()=>{
     const history=useHistory()
     const[quotes, setQuotes]=useState(undefined)
     const[pages, setPages]=useState(undefined)
+    const[pageCategories, setPageCategories]=useState([])
+    const[quoteCategories, setQuoteCategories]=useState([])
     const[value, setValue]=useState(0)
     const[id, setId]=useState('')
     const classes=useStyles()
@@ -66,6 +68,8 @@ export const Main=()=>{
                         if(data.userId==item.id){
                             setPages(user.pages)
                             setQuotes(user.quotes)
+                            setPageCategories(user.pageCategories)
+                            setQuoteCategories(user.quoteCategories)
                         }
                     })
                 })
@@ -100,11 +104,11 @@ export const Main=()=>{
             </div>
 
             <TabPanel value={value} index={0} className={classes.tabPanel}>
-                <Quotes quotes={quotes} id={id}/>
+                <Quotes quotes={quotes} categories={quoteCategories} id={id}/>
             </TabPanel>
 
             <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <Pages pages={pages} id={id}/>
+                <Pages pages={pages} categories={pageCategories} id={id}/>
             </TabPanel>
         </div>
      )

@@ -127,7 +127,9 @@ export const PageView=props=>{
 
             firebase.firestore().collection("users").doc(props.id).set({
                 quotes: data.quotes,
-                pages: pages
+                pages: pages,
+                quoteCategories: data.quoteCategories,
+                pageCategories: data.pageCategories
             })
         })
 
@@ -144,7 +146,8 @@ export const PageView=props=>{
                         favourite: !props.page.favourite,
                         image: props.page.image,
                         title: props.page.title,
-                        url: props.page.url
+                        url: props.page.url,
+                        categories: props.page.categories
                     }
                 else
                     return item
@@ -152,7 +155,9 @@ export const PageView=props=>{
 
             firebase.firestore().collection("users").doc(props.id).set({
                 quotes: data.quotes,
-                pages: pages
+                pages: pages,
+                quoteCategories: data.quoteCategories,
+                pageCategories: data.pageCategories
             })
         })
         setMenuAnchor(null)

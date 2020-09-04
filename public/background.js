@@ -38,9 +38,10 @@ document.addEventListener("DOMContentLoaded", event=>{
       docRef.get().then(doc=>{
           if(!doc.exists){
               firebase.firestore().collection('users').doc(id).set({
-                  email: user.email,
                   pages: [],
-                  quotes:[]
+                  quotes:[],
+                  pageCategories: [],
+                  quoteCategories: []
                 }).then(()=>{
                   console.log("Document successfully written")
                 })
@@ -68,8 +69,11 @@ document.addEventListener("DOMContentLoaded", event=>{
                           url: clickData.pageUrl,
                           favIcon: favIcon,
                           date: date,
+                          categories: [],
                           favourite: false
-                      }]
+                      }],
+                      pageCategories: data.pageCategories,
+                      quoteCategories: data.quoteCategories
                   })
               })
           })
@@ -94,8 +98,11 @@ document.addEventListener("DOMContentLoaded", event=>{
                                 title: syncData.title,
                                 date: date,
                                 image: response.image,
+                                categories: [],
                                 favourite: false
-                            }]
+                            }],
+                            pageCategories: data.pageCategories,
+                            quoteCategories: data.quoteCategories
                         })
                     })
                 })

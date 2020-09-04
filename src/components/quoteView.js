@@ -27,6 +27,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import MenuIcon from '@material-ui/icons/Menu'
+import ClassIcon from '@material-ui/icons/Class'
 const firebase=require('firebase')
 
 const useStyles=makeStyles(theme=>({
@@ -73,7 +74,10 @@ const useStyles=makeStyles(theme=>({
         color: '#444'
     },
     menu:{
-        width: '166px'
+        width: '190px'
+    },
+    categoriesMenu:{
+        position: 'table'
     },
     collapseLong:{
         width: 'calc(100% - 68px)'
@@ -130,6 +134,8 @@ export const QuoteView=props=>{
     const [showText, setShowText]=useState(false)
     const [menuAnchor, setMenuAnchor]=useState(null)
     const [shareMenu, setShareMenu]=useState(false)
+    const [categoriesAddAnchor, setCategoriesAddAnchor]=useState(false)
+    const [categoriesRemoveAnchor, setCategoriesRemoveAnchor]=useState(false)
     const date=new Date(1970, 0, 1)
     date.setSeconds(props.quote.date.seconds)
 
@@ -140,14 +146,17 @@ export const QuoteView=props=>{
 
             firebase.firestore().collection("users").doc(props.id).set({
                 quotes: quotes,
-                pages: data.pages
+                pages: data.pages,
+                quoteCategories: data.quoteCategories,
+                pageCategories: data.pageCategories
             })
         })
 
         setMenuAnchor(null)
     }
 
-    const handleFavourite=()=>{         firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+    const handleFavourite=()=>{
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
             let data=doc.data()
             let quotes=data.quotes.map(item=>{
                 if(item.text==props.quote.text && item.date.seconds==props.quote.date.seconds)
@@ -156,7 +165,8 @@ export const QuoteView=props=>{
                         favIcon: props.quote.favIcon,
                         favourite: !props.quote.favourite,
                         text: props.quote.text,
-                        url: props.quote.url
+                        url: props.quote.url,
+                        categories: props.quote.categories
                     }
                 else
                     return item
@@ -164,10 +174,68 @@ export const QuoteView=props=>{
 
             firebase.firestore().collection("users").doc(props.id).set({
                 quotes: quotes,
-                pages: data.pages
+                pages: data.pages,
+                quoteCategories: data.quoteCategories,
+                pageCategories: data.pageCategories
             })
         })
         setMenuAnchor(null)
+    }
+
+    const addToCategory=category=>{
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+            let quotes=data.quotes.map(item=>{
+                if(item.text==props.quote.text && item.date.seconds==props.quote.date.seconds)
+                    return{
+                        date: props.quote.date,
+                        favIcon: props.quote.favIcon,
+                        favourite: props.quote.favourite,
+                        text: props.quote.text,
+                        url: props.quote.url,
+                        categories: [...props.quote.categories, category]
+                    }
+                else
+                    return item
+                })
+
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: quotes,
+                pages: data.pages,
+                quoteCategories: data.quoteCategories,
+                pageCategories: data.pageCategories
+            })
+        })
+        setCategoriesAddAnchor(null)
+    }
+
+    const removeFromCategory=category=>{
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+            let categories=props.categories.filter(item=>item!=category)
+
+            let quotes=data.quotes.map(item=>{
+                if(item.text==props.quote.text && item.date.seconds==props.quote.date.seconds)
+                    return{
+                        date: props.quote.date,
+                        favIcon: props.quote.favIcon,
+                        favourite: props.quote.favourite,
+                        text: props.quote.text,
+                        url: props.quote.url,
+                        categories: categories
+                    }
+                else
+                    return item
+                })
+
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: quotes,
+                pages: data.pages,
+                quoteCategories: data.quoteCategories,
+                pageCategories: data.pageCategories
+            })
+        })
+        setCategoriesRemoveAnchor(null)
     }
 
     return(
@@ -204,6 +272,47 @@ export const QuoteView=props=>{
                                     <FavoriteBorderIcon className={classes.menuItem}/>
                         }Favourite
                     </MenuItem>
+
+                    <MenuItem
+                        onClick={event=>setCategoriesAddAnchor(event.currentTarget)}
+                        className={classes.categoriesMenu}>
+                        <ClassIcon className={classes.menuItem}/>
+                        Add to...
+                    </MenuItem>
+
+                    <Menu
+                        open={categoriesAddAnchor}
+                        keepMounted
+                        anchorEl={categoriesAddAnchor}
+                        onClose={()=>setCategoriesAddAnchor(false)}
+                        className={classes.menu}>
+                        {
+                            props.categories.map(category=>
+                                <MenuItem onClick={()=>addToCategory(category)}>{category}</MenuItem>
+                            )
+                        }
+                    </Menu>
+
+                    <MenuItem
+                        onClick={event=>setCategoriesRemoveAnchor(event.currentTarget)}
+                        className={classes.categoriesMenu}
+                        style={props.quote.categories.length ? {display: 'flex'} : {display: 'none'}}>
+                        <ClassIcon className={classes.menuItem}/>
+                        Remove from...
+                    </MenuItem>
+
+                    <Menu
+                        open={categoriesRemoveAnchor}
+                        keepMounted
+                        anchorEl={categoriesRemoveAnchor}
+                        onClose={()=>setCategoriesRemoveAnchor(false)}
+                        className={classes.menu}>
+                        {
+                            props.quote.categories.map(category=>
+                                <MenuItem onClick={()=>removeFromCategory(category)}>{category}</MenuItem>
+                            )
+                        }
+                    </Menu>
 
                     <MenuItem onClick={handleDelete}>
                         <DeleteIcon className={classes.menuItem}/>Delete

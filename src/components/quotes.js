@@ -4,7 +4,9 @@ import {Typography,
     makeStyles,
     IconButton,
     InputBase,
+    Collapse,
     Menu,
+    Popover,
     MenuItem} from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import SortIcon from '@material-ui/icons/Sort'
@@ -13,8 +15,17 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
+import ClassIcon from '@material-ui/icons/Class'
+import AddIcon from '@material-ui/icons/Add'
+import RemoveIcon from '@material-ui/icons/Remove'
+const firebase=require('firebase')
 
 const useStyles=makeStyles(theme=>({
+    // '@global':{
+    // '.MuiTypography-root':{
+    //     color: 'green'
+    //     }
+    // },
     container:{
         margin: '0 0 20px'
     },
@@ -27,7 +38,7 @@ const useStyles=makeStyles(theme=>({
     search:{
         display: 'inline-flex',
         backgroundColor: '#b3bcbf',
-        width: '280px',
+        width: '270px',
         borderRadius: '3px'
     },
     searchInput:{
@@ -57,6 +68,19 @@ const useStyles=makeStyles(theme=>({
         width: '28px',
         height: '28px',
         color: '#444',
+    },
+    classBtn:{
+        height: '42px',
+        width: '42px',
+        position: 'absolute',
+        margin: 'auto 12px'
+    },
+    category:{
+        justifyContent: 'space-between'
+    },
+    classIcon:{
+        width: '36px',
+        height: '36px'
     },
     favouriteBtn:{
         height: '44px',
@@ -97,8 +121,13 @@ export const Quotes=props=>{
     const [quotes, setQuotes]=useState([])
     const [filter, setFilter]=useState('')
     const [favouriteFilter, setFavouriteFilter]=useState(false)
+    const [categoryFilter, setCategoryFilter]=useState('')
+    const [categoriesPopover, setCategoriesPopover]=useState(null)
     const [currentSorting, setCurrentSorting]=useState('')
+    const [category, setCategory]=useState('')
     const classes=useStyles()
+
+    console.log(category);
 
     useEffect(()=>{
         props.quotes && setQuotes(props.quotes)
@@ -142,6 +171,51 @@ export const Quotes=props=>{
         currentSorting==='date' ? sortDate(type) : sortName(type)
     }
 
+    const addCategory=()=>{
+            firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+                let data=doc.data()
+
+                firebase.firestore().collection("users").doc(props.id).set({
+                    quotes: data.quotes,
+                    pages: data.pages,
+                    quoteCategories: [...data.quoteCategories, category],
+                    pageCategories: data.pageCategories
+                })
+            })
+
+        setCategory('')
+    }
+
+    const removeCategory=_category=>{
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+            let categories=data.quoteCategories.filter(item=>item!=_category)
+            let quotes=data.quotes.map(quote=>{
+                let _categories=quote.categories.filter(cat=>cat!=_category)
+                return{
+                    date: quote.date,
+                    favIcon: quote.favIcon,
+                    favourite: quote.favourite,
+                    text: quote.text,
+                    url: quote.url,
+                    categories: _categories
+                }
+            })
+
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: quotes,
+                pages: data.pages,
+                quoteCategories: categories,
+                pageCategories: data.pageCategories
+            })
+        })
+    }
+
+    const handleCategoryFilter=category=>{
+        setCategoryFilter(category)
+        setCategoriesPopover(false)
+    }
+
     return(
         <div className={classes.container}>
             <div className={classes.nav}>
@@ -159,6 +233,49 @@ export const Quotes=props=>{
                             <CloseIcon className={classes.clear}/>
                         </IconButton>
                     </div>
+
+                    <IconButton
+                        className={classes.classBtn}
+                        onClick={event=>setCategoriesPopover(event.currentTarget)}>
+                        <ClassIcon/>
+                    </IconButton>
+
+                    <Popover
+                        open={Boolean(categoriesPopover)}
+                        anchorEl={categoriesPopover}
+                        onClose={()=>{setCategoriesPopover(null)}}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                        horizontal: 'center'}}
+                        transformOrigin={{
+                            vertical: 'top',
+                        horizontal: 'center'}}>
+
+                        <MenuItem onClick={()=>handleCategoryFilter('')}>
+                            <Typography>All</Typography>
+                        </MenuItem>
+
+                        {props.categories.map(_category=>
+                            <MenuItem
+                                onClick={()=>handleCategoryFilter(_category)}
+                                className={classes.category}>
+                                <Typography
+                                    style={categoryFilter==_category ? {color: '#a3496a'} : {color: '#555'}}>{_category}</Typography>
+                                <RemoveIcon
+                                    onClick={()=>removeCategory(_category)}
+                                    className={classes.removeIcon}/>
+                            </MenuItem>
+                        )}
+
+                        <MenuItem>
+                            <InputBase
+                                placeholder='Add new'
+                                value={category}
+                                onChange={e=>setCategory(e.target.value)}/>
+                            <AddIcon onClick={addCategory}/>
+                        </MenuItem>
+
+                    </Popover>
 
                     <div className={classes.sortContainer}>
                         <IconButton onClick={()=>setFavouriteFilter(prev=>!prev)} className={classes.favouriteBtn}>
@@ -203,12 +320,14 @@ export const Quotes=props=>{
             </div>
 
             {quotes.length && quotes.map((quote,i)=>
-                quote.text.toLowerCase().includes(filter.toLowerCase()) &&
-                ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
-                    <QuoteView
-                        key={i}
-                        quote={quote}
-                        id={props.id}/>
+                (quote.text.toLowerCase().includes(filter.toLowerCase()) &&
+                    ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
+                    ((quote.categories.includes(categoryFilter)) || categoryFilter=='')) &&
+                        <QuoteView
+                            key={i}
+                            quote={quote}
+                            categories={props.categories}
+                            id={props.id}/>
             )}
         </div>
     )
