@@ -26,6 +26,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import MenuIcon from '@material-ui/icons/Menu'
+import ClassIcon from '@material-ui/icons/Class'
 const firebase=require('firebase')
 
 const useStyles=makeStyles(theme=>({
@@ -82,8 +83,15 @@ const useStyles=makeStyles(theme=>({
         height: '46px',
         width: '46px'
     },
+    menuItem:{
+        marginRight: '10px',
+        color: '#444'
+    },
     menu:{
-        width: '166px'
+        width: '190px'
+    },
+    categoriesMenu:{
+        position: 'table'
     },
     subMenuIcon:{
         marginRight: '10px',
@@ -117,6 +125,8 @@ export const PageView=props=>{
     const classes=useStyles()
     const [menuAnchor, setMenuAnchor]=useState(null)
     const [shareMenu, setShareMenu]=useState(false)
+    const [categoriesAddAnchor, setCategoriesAddAnchor]=useState(false)
+    const [categoriesRemoveAnchor, setCategoriesRemoveAnchor]=useState(false)
     const date=new Date(1970, 0, 1)
     date.setSeconds(props.page.date.seconds)
 
@@ -136,8 +146,10 @@ export const PageView=props=>{
         setMenuAnchor(null)
     }
 
-    const handleFavourite=()=>{         firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+    const handleFavourite=()=>{
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
             let data=doc.data()
+
             let pages=data.pages.map(item=>{
                 if(item.url==props.page.url && item.date.seconds==props.page.date.seconds)
                     return {
@@ -163,6 +175,65 @@ export const PageView=props=>{
         setMenuAnchor(null)
     }
 
+    const addToCategory=category=>{
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+
+            let pages=data.pages.map(item=>{
+                if(item.text==props.page.text && item.date.seconds==props.page.date.seconds)
+                    return{
+                        date: props.page.date,
+                        favIcon: props.page.favIcon,
+                        favourite: props.page.favourite,
+                        image: props.page.image,
+                        title: props.page.title,
+                        url: props.page.url,
+                        categories: [...props.page.categories, category]
+                    }
+                else
+                    return item
+                })
+
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: data.quotes,
+                pages: pages,
+                quoteCategories: data.quoteCategories,
+                pageCategories: data.pageCategories
+            })
+        })
+        setCategoriesAddAnchor(null)
+    }
+
+    const removeFromCategory=category=>{
+        firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
+            let data=doc.data()
+            let categories=props.categories.filter(item=>item!=category)
+
+            let pages=data.pages.map(item=>{
+                if(item.text==props.page.text && item.date.seconds==props.page.date.seconds)
+                    return{
+                        date: props.page.date,
+                        favIcon: props.page.favIcon,
+                        favourite: props.page.favourite,
+                        title: props.page.title,
+                        image: props.page.image,
+                        url: props.page.url,
+                        categories: categories
+                    }
+                else
+                    return item
+            })
+
+            firebase.firestore().collection("users").doc(props.id).set({
+                quotes: data.quotes,
+                pages: pages,
+                quoteCategories: data.quoteCategories,
+                pageCategories: data.pageCategories
+            })
+        })
+        setCategoriesRemoveAnchor(null)
+    }
+
     return(
         <Grid item xs={6} sm={4} md={3} className={classes.grid}>
             <div className={classes.container}>
@@ -178,7 +249,10 @@ export const PageView=props=>{
 
                             <div className={classes.headerData}>
                                 <Typography>
-                                    <Link href={props.page.url} target='_blank' className={classes.link}>
+                                    <Link
+                                        href={props.page.url}
+                                        target='_blank'
+                                        className={classes.link}>
                                         {props.page.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]}
                                     </Link>
                                 </Typography>
@@ -188,7 +262,9 @@ export const PageView=props=>{
                         </div>
                     </div>
 
-                    <IconButton onClick={event=>setMenuAnchor(event.currentTarget)} className={classes.menuBtn}>
+                    <IconButton
+                        onClick={event=>setMenuAnchor(event.currentTarget)}
+                        className={classes.menuBtn}>
                         <MenuIcon className={classes.menuIcon}/>
                     </IconButton>
 
@@ -200,12 +276,55 @@ export const PageView=props=>{
                         className={classes.menu}>
 
                         <MenuItem onClick={handleFavourite} className={classes.menuItem}>
-                            {props.page.favourite ?
-                                <FavoriteIcon
-                                    style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.subMenuIcon}/> :
-                                    <FavoriteBorderIcon className={classes.subMenuIcon}/>
+                            {
+                                props.page.favourite ?
+                                    <FavoriteIcon
+                                        style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.subMenuIcon}/> :
+                                        <FavoriteBorderIcon className={classes.subMenuIcon}/>
                             }Favourite
                         </MenuItem>
+
+                        <MenuItem
+                            onClick={event=>setCategoriesAddAnchor(event.currentTarget)}
+                            className={classes.categoriesMenu}>
+                            <ClassIcon className={classes.menuItem}/>
+                            Add to...
+                        </MenuItem>
+
+                        <Menu
+                            open={categoriesAddAnchor}
+                            keepMounted
+                            anchorEl={categoriesAddAnchor}
+                            onClose={()=>setCategoriesAddAnchor(false)}
+                            className={classes.menu}>
+                            {
+                                props.categories.map(category=>
+                                    !props.page.categories.includes(category) &&
+                                        <MenuItem onClick={()=>addToCategory(category)}>{category}</MenuItem>
+                                )
+                            }
+                        </Menu>
+
+                        <MenuItem
+                            onClick={event=>setCategoriesRemoveAnchor(event.currentTarget)}
+                            className={classes.categoriesMenu}
+                            style={props.page.categories.length ? {display: 'flex'} : {display: 'none'}}>
+                            <ClassIcon className={classes.menuItem}/>
+                            Remove from...
+                        </MenuItem>
+
+                        <Menu
+                            open={categoriesRemoveAnchor}
+                            keepMounted
+                            anchorEl={categoriesRemoveAnchor}
+                            onClose={()=>setCategoriesRemoveAnchor(false)}
+                            className={classes.menu}>
+                            {
+                                props.page.categories.map(category=>
+                                    <MenuItem onClick={()=>removeFromCategory(category)}>{category}</MenuItem>
+                                )
+                            }
+                        </Menu>
 
                         <MenuItem onClick={handleDelete} className={classes.menuItem}>
                             <DeleteIcon className={classes.subMenuIcon}/>Delete
@@ -277,7 +396,6 @@ export const PageView=props=>{
                     </a>
                 </div>
             </div>
-
         </Grid>
     )
 }

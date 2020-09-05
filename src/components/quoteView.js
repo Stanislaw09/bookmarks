@@ -185,6 +185,7 @@ export const QuoteView=props=>{
     const addToCategory=category=>{
         firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
             let data=doc.data()
+
             let quotes=data.quotes.map(item=>{
                 if(item.text==props.quote.text && item.date.seconds==props.quote.date.seconds)
                     return{
@@ -253,7 +254,9 @@ export const QuoteView=props=>{
                     <Typography className={classes.date}>{date.toLocaleDateString()}</Typography>
                 </div>
 
-                <IconButton onClick={event=>setMenuAnchor(event.currentTarget)} className={classes.menuBtn}>
+                <IconButton
+                    onClick={event=>setMenuAnchor(event.currentTarget)}
+                    className={classes.menuBtn}>
                     <MenuIcon className={classes.icons}/>
                 </IconButton>
 
@@ -288,7 +291,8 @@ export const QuoteView=props=>{
                         className={classes.menu}>
                         {
                             props.categories.map(category=>
-                                <MenuItem onClick={()=>addToCategory(category)}>{category}</MenuItem>
+                                !props.quote.categories.includes(category) &&
+                                    <MenuItem onClick={()=>addToCategory(category)}>{category}</MenuItem>
                             )
                         }
                     </Menu>

@@ -93,7 +93,10 @@ export const Main=()=>{
                     <ArrowBackIcon className={classes.arrowBackIcon}/>
                 </IconButton>
 
-                <Tabs centered onChange={handleChange} className={classes.tabs}>
+                <Tabs
+                    centered
+                    onChange={handleChange}
+                    className={classes.tabs}>
                     <Tab
                         label='Quotes'
                         className={value===0 ? classes.captionEnabled : classes.captionDisabled}/>

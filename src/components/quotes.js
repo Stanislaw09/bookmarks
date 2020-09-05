@@ -3,8 +3,8 @@ import {QuoteView} from './quoteView'
 import {Typography,
     makeStyles,
     IconButton,
+    Slide,
     InputBase,
-    Collapse,
     Menu,
     Popover,
     MenuItem} from '@material-ui/core'
@@ -21,11 +21,6 @@ import RemoveIcon from '@material-ui/icons/Remove'
 const firebase=require('firebase')
 
 const useStyles=makeStyles(theme=>({
-    // '@global':{
-    // '.MuiTypography-root':{
-    //     color: 'green'
-    //     }
-    // },
     container:{
         margin: '0 0 20px'
     },
@@ -78,10 +73,6 @@ const useStyles=makeStyles(theme=>({
     category:{
         justifyContent: 'space-between'
     },
-    classIcon:{
-        width: '36px',
-        height: '36px'
-    },
     favouriteBtn:{
         height: '44px',
         width: '44px',
@@ -126,8 +117,6 @@ export const Quotes=props=>{
     const [currentSorting, setCurrentSorting]=useState('')
     const [category, setCategory]=useState('')
     const classes=useStyles()
-
-    console.log(category);
 
     useEffect(()=>{
         props.quotes && setQuotes(props.quotes)
@@ -174,11 +163,13 @@ export const Quotes=props=>{
     const addCategory=()=>{
             firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
                 let data=doc.data()
+                let categories=[...data.quoteCategories, category]
+                categories.sort()
 
                 firebase.firestore().collection("users").doc(props.id).set({
                     quotes: data.quotes,
                     pages: data.pages,
-                    quoteCategories: [...data.quoteCategories, category],
+                    quoteCategories: categories,
                     pageCategories: data.pageCategories
                 })
             })
@@ -190,9 +181,10 @@ export const Quotes=props=>{
         firebase.firestore().collection('users').doc(props.id).get().then(doc=>{
             let data=doc.data()
             let categories=data.quoteCategories.filter(item=>item!=_category)
+
             let quotes=data.quotes.map(quote=>{
                 let _categories=quote.categories.filter(cat=>cat!=_category)
-                return{
+                return {
                     date: quote.date,
                     favIcon: quote.favIcon,
                     favourite: quote.favourite,
@@ -237,7 +229,7 @@ export const Quotes=props=>{
                     <IconButton
                         className={classes.classBtn}
                         onClick={event=>setCategoriesPopover(event.currentTarget)}>
-                        <ClassIcon/>
+                        <ClassIcon style={categoryFilter!='' ? {color: '#a3496a'} : {color: '#555'}}/>
                     </IconButton>
 
                     <Popover
@@ -262,8 +254,7 @@ export const Quotes=props=>{
                                 <Typography
                                     style={categoryFilter==_category ? {color: '#a3496a'} : {color: '#555'}}>{_category}</Typography>
                                 <RemoveIcon
-                                    onClick={()=>removeCategory(_category)}
-                                    className={classes.removeIcon}/>
+                                    onClick={()=>removeCategory(_category)}/>
                             </MenuItem>
                         )}
 
@@ -274,7 +265,6 @@ export const Quotes=props=>{
                                 onChange={e=>setCategory(e.target.value)}/>
                             <AddIcon onClick={addCategory}/>
                         </MenuItem>
-
                     </Popover>
 
                     <div className={classes.sortContainer}>
@@ -319,15 +309,16 @@ export const Quotes=props=>{
                 </div>
             </div>
 
-            {quotes.length && quotes.map((quote,i)=>
-                (quote.text.toLowerCase().includes(filter.toLowerCase()) &&
-                    ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
-                    ((quote.categories.includes(categoryFilter)) || categoryFilter=='')) &&
-                        <QuoteView
-                            key={i}
-                            quote={quote}
-                            categories={props.categories}
-                            id={props.id}/>
+            {
+                quotes.length && quotes.map((quote,i)=>
+                    (quote.text.toLowerCase().includes(filter.toLowerCase()) &&
+                        ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
+                        ((quote.categories.includes(categoryFilter)) || categoryFilter=='')) &&
+                            <QuoteView
+                                key={i}
+                                quote={quote}
+                                categories={props.categories}
+                                id={props.id}/>
             )}
         </div>
     )
