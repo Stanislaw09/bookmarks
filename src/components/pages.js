@@ -71,6 +71,10 @@ const useStyles=makeStyles(theme=>({
         position: 'absolute',
         margin: 'auto 12px'
     },
+    categoriesHeader:{
+        fontWeight: '700',
+        margin: '6px 10px 0'
+    },
     category:{
         justifyContent: 'space-between'
     },
@@ -108,6 +112,11 @@ const useStyles=makeStyles(theme=>({
     },
     grid:{
         padding: '8px'
+    },
+    starter:{
+        fontSize: '26px',
+        margin: '12px 16px',
+        color: '#d5d5d5'
     }
 }))
 
@@ -246,6 +255,8 @@ export const Pages=props=>{
                             vertical: 'top',
                         horizontal: 'center'}}>
 
+                        <Typography className={classes.categoriesHeader}>Categories</Typography>
+
                         <MenuItem onClick={()=>handleCategoryFilter('')}>
                             <Typography>All</Typography>
                         </MenuItem>
@@ -314,7 +325,7 @@ export const Pages=props=>{
 
             <Grid container spacing={1} className={classes.grid}>
                 {
-                    pages.length && pages.map((page,i)=>
+                    pages.length ? pages.map((page,i)=>
                         (page.title.toLowerCase().includes(filter.toLowerCase()) &&
                             ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
                             ((page.categories.includes(categoryFilter)) || categoryFilter=='')) &&
@@ -323,7 +334,9 @@ export const Pages=props=>{
                                     page={page}
                                     categories={props.categories}
                                     id={props.id}/>
-                    )}
+                    ) :
+                    <Typography className={classes.starter}>It's a little empty in here, save something</Typography>
+                }
             </Grid>
         </div>
     )

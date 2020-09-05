@@ -70,6 +70,10 @@ const useStyles=makeStyles(theme=>({
         position: 'absolute',
         margin: 'auto 12px'
     },
+    categoriesHeader:{
+        fontWeight: '700',
+        margin: '6px 10px 0'
+    },
     category:{
         justifyContent: 'space-between'
     },
@@ -104,6 +108,11 @@ const useStyles=makeStyles(theme=>({
         padding: '2px 6px',
         fontSize: '18px',
         color: '#555'
+    },
+    starter:{
+        fontSize: '26px',
+        margin: '20px',
+        color: '#d5d5d5'
     }
 }))
 
@@ -221,7 +230,9 @@ export const Quotes=props=>{
                             onChange={e=>setFilter(e.target.value)}
                             className={classes.searchInput}/>
 
-                        <IconButton onClick={()=>setFilter('')} className={classes.clearBtn}>
+                        <IconButton
+                            onClick={()=>setFilter('')}
+                            className={classes.clearBtn}>
                             <CloseIcon className={classes.clear}/>
                         </IconButton>
                     </div>
@@ -242,6 +253,8 @@ export const Quotes=props=>{
                         transformOrigin={{
                             vertical: 'top',
                         horizontal: 'center'}}>
+
+                        <Typography className={classes.categoriesHeader}>Categories</Typography>
 
                         <MenuItem onClick={()=>handleCategoryFilter('')}>
                             <Typography>All</Typography>
@@ -310,7 +323,7 @@ export const Quotes=props=>{
             </div>
 
             {
-                quotes.length && quotes.map((quote,i)=>
+                quotes.length ? quotes.map((quote,i)=>
                     (quote.text.toLowerCase().includes(filter.toLowerCase()) &&
                         ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
                         ((quote.categories.includes(categoryFilter)) || categoryFilter=='')) &&
@@ -319,7 +332,9 @@ export const Quotes=props=>{
                                 quote={quote}
                                 categories={props.categories}
                                 id={props.id}/>
-            )}
+                ) :
+                <Typography className={classes.starter}>It's a little empty in here, save something</Typography>
+            }
         </div>
     )
 }

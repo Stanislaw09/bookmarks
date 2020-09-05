@@ -15,13 +15,13 @@ document.addEventListener("DOMContentLoaded", event=>{
     })
 
   const app=firebase.initializeApp({
-      apiKey: "AIzaSyBN4OxyFPnGpYmUbrpZgbBsop79KccRgXI",
-      authDomain: "quote-7cbcd.firebaseapp.com",
-      databaseURL: "https://quote-7cbcd.firebaseio.com",
-      projectId: "quote-7cbcd",
-      storageBucket: "quote-7cbcd.appspot.com",
-      messagingSenderId: "819773771295",
-      appId: "1:819773771295:web:54c4b62f06e1473ec00f2a"
+      apiKey: "AIzaSyBwv6kBwArkU2E5Ye99J_y24yVHugkgG5s",
+      authDomain: "bookmarksextension-ddc64.firebaseapp.com",
+      databaseURL: "https://bookmarksextension-ddc64.firebaseio.com",
+      projectId: "bookmarksextension-ddc64",
+      storageBucket: "bookmarksextension-ddc64.appspot.com",
+      messagingSenderId: "148052591321",
+      appId: "1:148052591321:web:52bce476c97c903386f4c8"
   })
   let database=app.database().ref()
 
