@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", event=>{
     let id=''
     let contextMenu={
           "id": "bookmarks",
-          title: "Save",
+          title: "Save to quotes",
           "contexts": ["selection"]
       }
     chrome.contextMenus.create(contextMenu)
