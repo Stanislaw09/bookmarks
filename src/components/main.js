@@ -1,10 +1,9 @@
+/*global chrome*/
 import React,{useState, useEffect} from 'react'
 import {Tabs, Tab, makeStyles, IconButton} from '@material-ui/core'
 import {useHistory} from 'react-router-dom'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import {Quotes} from './quotes'
 import {Pages} from './pages'
-const firebase=require('firebase')
 
 const useStyles=makeStyles({
     container:{
@@ -52,29 +51,10 @@ export const Main=()=>{
     const classes=useStyles()
 
     useEffect(()=>{
-        firebase
-            .firestore()
-            .collection('quotes')
-            .onSnapshot(serverUpdate=>{
-                const _quotes=serverUpdate.docs.map(item=>{
-                    const data=item.data()
-                    data['id']=item.id
-                    return data
-                })
-                setQuotes(_quotes)
-            })
-
-        firebase
-            .firestore()
-            .collection('pages')
-            .onSnapshot(serverUpdate=>{
-                const _pages=serverUpdate.docs.map(item=>{
-                    const data=item.data()
-                    data['id']=item.id
-                    return data
-                })
-                setPages(_pages)
-            })
+        chrome.storage.sync.get(null, data=>{
+            setPages(data.pages)
+            setQuotes(data.quotes)
+        })
     },[])
 
     const handleChange=(event, newValue)=>setValue(newValue)
@@ -90,10 +70,6 @@ export const Main=()=>{
      return(
         <div className={classes.container}>
             <div className={classes.header}>
-                <IconButton onClick={()=>history.push('/')} className={classes.arrowBack}>
-                    <ArrowBackIcon className={classes.arrowBackIcon}/>
-                </IconButton>
-
                 <Tabs centered onChange={handleChange} className={classes.tabs}>
                     <Tab
                         label='Quotes'
@@ -103,11 +79,11 @@ export const Main=()=>{
             </div>
 
             <TabPanel value={value} index={0} className={classes.tabPanel}>
-                <Quotes quotes={quotes}/>
+                <Pages pages={pages}/>
             </TabPanel>
 
             <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <Pages pages={pages}/>
+                <Quotes quotes={quotes}/>
             </TabPanel>
         </div>
      )

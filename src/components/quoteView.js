@@ -27,7 +27,6 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import MenuIcon from '@material-ui/icons/Menu'
-const firebase=require('firebase')
 
 const useStyles=makeStyles(theme=>({
     card:{
@@ -130,27 +129,6 @@ export const QuoteView=props=>{
     const date=new Date(1970, 0, 1)
     date.setSeconds(props.quote.date.seconds)
 
-    const handleDelete=event=>{
-        firebase.firestore().collection('quotes').doc(props.quote.id).delete().then(()=>{
-            console.log("deleted")
-        }).catch(error=>{
-            console.error("Shit happens:",error)
-        })
-        setMenuAnchor(null)
-    }
-
-    const handleFavourite=()=>{
-        firebase.firestore().collection('quotes').doc(props.quote.id).set({
-            favourite: !props.quote.favourite,
-            url: props.quote.url,
-            date: props.quote.date,
-            favIcon: props.quote.favIcon,
-            text: props.quote.text
-        })
-
-        setMenuAnchor(null)
-    }
-
     return(
         <Card className={classes.card}>
             <Paper className={classes.cardHeader} elevation={0}>
@@ -177,7 +155,7 @@ export const QuoteView=props=>{
                     onClose={()=>setMenuAnchor(false)}
                     className={classes.menu}>
 
-                    <MenuItem onClick={handleFavourite}>
+                    <MenuItem onClick={()=>props.handleFavourite(props.quote.url)}>
                         {
                             props.quote.favourite ?
                                 <FavoriteIcon
@@ -186,7 +164,7 @@ export const QuoteView=props=>{
                         }Favourite
                     </MenuItem>
 
-                    <MenuItem onClick={handleDelete}>
+                    <MenuItem onClick={()=>props.handleDelete(props.quote.url)}>
                         <DeleteIcon className={classes.menuItem}/>Delete
                     </MenuItem>
 

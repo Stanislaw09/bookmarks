@@ -1,3 +1,4 @@
+/* global chrome*/
 import React,{useState, useEffect} from 'react'
 import {PageView} from './pageView'
 import {Typography,
@@ -109,6 +110,33 @@ export const Pages=props=>{
         props.pages && setPages(props.pages)
     },[props])
 
+    const handleDelete=url=>{
+        let newPages=pages.filter(item=>item.url!=url)
+
+        setPages(newPages)
+
+        chrome.storage.sync.set({
+            pages: newPages
+        })
+    }
+
+    const handleFavourite=url=>{
+        let newPages=pages.map(item=>{
+            if(item.url===url){
+                let _item=item
+                _item.favourite=!item.favourite
+                return _item
+            }
+            return item
+        })
+
+        setPages(newPages)
+
+        chrome.storage.sync.set({
+            pages: newPages
+        })
+    }
+
     const sortDate=(order)=>{
         const sorted=[...pages].sort((a,b)=>{
             if(order==='asc')
@@ -202,7 +230,9 @@ export const Pages=props=>{
                     ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
                         <PageView
                             key={i}
-                            page={page}/>
+                            page={page}
+                            handleDelete={handleDelete}
+                            handleFavourite={handleFavourite}/>
                 )}
             </Grid>
 

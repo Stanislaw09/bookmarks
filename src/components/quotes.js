@@ -1,3 +1,4 @@
+/* global chrome*/
 import React,{useState, useEffect} from 'react'
 import {QuoteView} from './quoteView'
 import {Typography,
@@ -104,6 +105,33 @@ export const Quotes=props=>{
         props.quotes && setQuotes(props.quotes)
     },[props])
 
+    const handleDelete=url=>{
+        let newQuotes=quotes.filter(item=>item.url!=url)
+
+        setQuotes(newQuotes)
+
+        chrome.storage.sync.set({
+            quotes: newQuotes
+        })
+    }
+
+    const handleFavourite=url=>{
+        let newQuotes=quotes.map(item=>{
+            if(item.url===url){
+                let _item=item
+                _item.favourite=!item.favourite
+                return _item
+            }
+            return item
+        })
+
+        setQuotes(newQuotes)
+
+        chrome.storage.sync.set({
+            quotes: newQuotes
+        })
+    }
+
     const sortDate=(order)=>{
         const sorted=[...quotes].sort((a,b)=>{
             if(order==='asc')
@@ -198,7 +226,9 @@ export const Quotes=props=>{
                 ((favouriteFilter && quote.favourite) || (!favouriteFilter)) &&
                     <QuoteView
                         key={i}
-                        quote={quote}/>
+                        quote={quote}
+                        handleDelete={handleDelete}
+                        handleFavourite={handleFavourite}/>
             )}
 
         </div>

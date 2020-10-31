@@ -26,7 +26,6 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import MenuIcon from '@material-ui/icons/Menu'
-const firebase=require('firebase')
 
 const useStyles=makeStyles(theme=>({
     grid:{
@@ -121,27 +120,6 @@ export const PageView=props=>{
     const date=new Date(1970, 0, 1)
     date.setSeconds(props.page.date.seconds)
 
-    const handleFavourite=()=>{
-        firebase.firestore().collection('pages').doc(props.page.id).set({
-            date: props.page.date,
-            favIcon: props.page.favIcon,
-            favourite: !props.page.favourite,
-            image: props.page.image,
-            title: props.page.title,
-            url: props.page.url
-        })
-        setMenuAnchor(null)
-    }
-
-    const handleDelete=event=>{
-        firebase.firestore().collection('pages').doc(props.page.id).delete().then(()=>{
-            console.log("deleted")
-        }).catch(error=>{
-            console.error("Shit happens:",error)
-        })
-        setMenuAnchor(null)
-    }
-
     return(
         <Grid item xs={6} sm={4} md={3} className={classes.grid}>
             <div className={classes.container}>
@@ -177,7 +155,9 @@ export const PageView=props=>{
                         onClose={()=>setMenuAnchor(false)}
                         className={classes.menu}>
 
-                        <MenuItem onClick={handleFavourite} className={classes.menuItem}>
+                        <MenuItem
+                            onClick={()=>props.handleFavourite(props.page.url)}
+                            className={classes.menuItem}>
                             {props.page.favourite ?
                                 <FavoriteIcon
                                     style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.subMenuIcon}/> :
@@ -185,11 +165,13 @@ export const PageView=props=>{
                             }Favourite
                         </MenuItem>
 
-                        <MenuItem onClick={handleDelete} className={classes.menuItem}>
+                        <MenuItem
+                            onClick={()=>props.handleDelete(props.page.url)} className={classes.menuItem}>
                             <DeleteIcon className={classes.subMenuIcon}/>Delete
                         </MenuItem>
 
-                        <MenuItem onClick={()=>setShareMenu(prev=>!prev)} className={classes.menuItem}>
+                        <MenuItem
+                            onClick={()=>setShareMenu(prev=>!prev)} className={classes.menuItem}>
                             <ShareIcon className={classes.subMenuIcon}/>Share
                         </MenuItem>
 

@@ -1,50 +1,45 @@
-import React,{useState, useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Switch, Route, useHistory} from 'react-router-dom'
 import {makeStyles, Button, Typography} from '@material-ui/core'
+import {Main} from './components/main'
 
-const useStyles=makeStyles({
-    header:{
+const useStyles = makeStyles({
+    header: {
         fontSize: '20px',
         margin: '12px',
         color: '#ccc'
     },
-    linkBtn:{
+    linkBtn: {
         margin: '12px'
     },
-    saveBtn:{
+    saveBtn: {
         margin: '0 4px'
     }
 })
 
-function App(){
-    const history=useHistory()
-    const classes=useStyles()
+function App() {
+    const history = useHistory()
+    const classes = useStyles()
 
-     return(
-         <div>
-             <Switch>
-                 <Route exact path="/">
-                     <div>
-                         <Typography className={classes.header}>Bookmarks management</Typography>
+    return(
+        <div>
+            <Switch>
+                <Route exact="exact" path="/">
+                    <div>
+                        <Typography className={classes.header}>Bookmarks management</Typography>
 
-                         <Button
-                             color='secondary'
-                             id='saveBtn'
-                             className={classes.saveBtn}>Save Page</Button>
+                        <Button color='secondary' id='saveBtn' className={classes.saveBtn}>Save Page</Button>
 
-                         <Button
-                             color='secondary'
-                             onClick={()=>history.push('/main')}
-                             className={classes.linkBtn}>Main View</Button>
-                     </div>
-                 </Route>
+                        <Button color='secondary' onClick={() => history.push('/main')} className={classes.linkBtn}>Main View</Button>
+                    </div>
+                </Route>
 
-                 <Route exact path="/main">
-
-                 </Route>
-             </Switch>
-         </div>
-     )
+                <Route exact="exact" path="/main">
+                    <Main/>
+                </Route>
+            </Switch>
+        </div>
+    )
 }
 
 export default App
