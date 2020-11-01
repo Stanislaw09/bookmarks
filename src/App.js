@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import {Switch, Route, useHistory} from 'react-router-dom'
 import {makeStyles, Button, Typography} from '@material-ui/core'
 import {Main} from './components/main'

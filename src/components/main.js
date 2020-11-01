@@ -1,7 +1,6 @@
 /*global chrome*/
 import React,{useState, useEffect} from 'react'
-import {Tabs, Tab, makeStyles, IconButton} from '@material-ui/core'
-import {useHistory} from 'react-router-dom'
+import {Tabs, Tab, makeStyles} from '@material-ui/core'
 import {Quotes} from './quotes'
 import {Pages} from './pages'
 
@@ -44,9 +43,10 @@ const useStyles=makeStyles({
 })
 
 export const Main=()=>{
-    const history=useHistory()
     const[quotes, setQuotes]=useState(undefined)
     const[pages, setPages]=useState(undefined)
+    const[pageCategories, setPageCategories]=useState([])
+    const[quoteCategories, setQuoteCategories]=useState([])
     const[value, setValue]=useState(0)
     const classes=useStyles()
 
@@ -54,6 +54,8 @@ export const Main=()=>{
         chrome.storage.sync.get(null, data=>{
             setPages(data.pages)
             setQuotes(data.quotes)
+            setPageCategories(data.pageCategories)
+            setQuoteCategories(data.quoteCategories)
         })
     },[])
 
@@ -72,18 +74,20 @@ export const Main=()=>{
             <div className={classes.header}>
                 <Tabs centered onChange={handleChange} className={classes.tabs}>
                     <Tab
-                        label='Quotes'
+                        label='Pages'
                         className={value===0 ? classes.captionEnabled : classes.captionDisabled}/>
-                    <Tab label='Pages' className={value===1 ? classes.captionEnabled : classes.captionDisabled}/>
+                    <Tab
+                        label='Quotes'
+                        className={value===1 ? classes.captionEnabled : classes.captionDisabled}/>
                 </Tabs>
             </div>
 
             <TabPanel value={value} index={0} className={classes.tabPanel}>
-                <Pages pages={pages}/>
+                <Pages pages={pages} categories={pageCategories}/>
             </TabPanel>
 
             <TabPanel value={value} index={1} className={classes.tabPanel}>
-                <Quotes quotes={quotes}/>
+                <Quotes quotes={quotes} categories={quoteCategories}/>
             </TabPanel>
         </div>
      )

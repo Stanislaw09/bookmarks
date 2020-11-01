@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", event=>{
     })
 
     chrome.storage.onChanged.addListener(() => {
-        chrome.storage.sync.get(['pages', 'quotes'], syncData => {
+        chrome.storage.sync.get(['pages', 'quotes', 'pageCategories', 'quoteCategories'], syncData => {
             console.log(syncData)
         })
     })

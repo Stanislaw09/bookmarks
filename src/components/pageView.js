@@ -26,6 +26,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import MenuIcon from '@material-ui/icons/Menu'
+import ClassIcon from '@material-ui/icons/Class'
 
 const useStyles=makeStyles(theme=>({
     grid:{
@@ -83,7 +84,7 @@ const useStyles=makeStyles(theme=>({
         margin: '0 2px'
     },
     menu:{
-        width: '166px'
+        width: '190px'
     },
     subMenuIcon:{
         marginRight: '10px',
@@ -117,6 +118,8 @@ export const PageView=props=>{
     const classes=useStyles()
     const [menuAnchor, setMenuAnchor]=useState(null)
     const [shareMenu, setShareMenu]=useState(false)
+    const [categoriesAddAnchor, setCategoriesAddAnchor]=useState(false)
+    const [categoriesRemoveAnchor, setCategoriesRemoveAnchor]=useState(false)
     const date=new Date(1970, 0, 1)
     date.setSeconds(props.page.date.seconds)
 
@@ -128,18 +131,28 @@ export const PageView=props=>{
                         <Avatar src={props.page.favIcon} className={classes.avatar}/>
 
                         <div className={classes.headerContent}>
-                            {props.page.title.length>46 ?
-                                <Typography className={classes.title}>{props.page.title.slice(0, 46)}...</Typography> :
-                                <Typography className={classes.title}>{props.page.title}</Typography>}
+                            {
+                                props.page.title.length>46 ?
+                                    <Typography className={classes.title}>
+                                        {props.page.title.slice(0, 46)}...
+                                    </Typography> :
+                                    <Typography className={classes.title}>
+                                        {props.page.title}
+                                    </Typography>
+                            }
 
                             <div className={classes.headerData}>
                                 <Typography>
                                     <Link href={props.page.url} target='_blank' className={classes.link}>
-                                        {props.page.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]}
+                                        {
+                                            props.page.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]
+                                        }
                                     </Link>
                                 </Typography>
 
-                                <Typography className={classes.date}>{date.toLocaleDateString()}</Typography>
+                                <Typography className={classes.date}>
+                                    {date.toLocaleDateString()}
+                                </Typography>
                             </div>
                         </div>
                     </div>
@@ -158,12 +171,65 @@ export const PageView=props=>{
                         <MenuItem
                             onClick={()=>props.handleFavourite(props.page.url)}
                             className={classes.menuItem}>
-                            {props.page.favourite ?
-                                <FavoriteIcon
-                                    style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.subMenuIcon}/> :
-                                    <FavoriteBorderIcon className={classes.subMenuIcon}/>
+                            {
+                                props.page.favourite ?
+                                    <FavoriteIcon
+                                        style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.subMenuIcon}/> :
+                                        <FavoriteBorderIcon className={classes.subMenuIcon}/>
                             }Favourite
                         </MenuItem>
+
+                        <MenuItem
+                            onClick={event=>setCategoriesAddAnchor(event.currentTarget)}
+                            className={classes.categoriesMenu}>
+                            <ClassIcon className={classes.menuItem}/>
+                            Add to...
+                        </MenuItem>
+
+                        <Menu
+                            open={categoriesAddAnchor}
+                            keepMounted
+                            anchorEl={categoriesAddAnchor}
+                            onClose={()=>setCategoriesAddAnchor(false)}
+                            className={classes.menu}>
+                            {
+                                props.categories.map(category=>
+                                    !props.page.categories.includes(category) &&
+                                        <MenuItem onClick={()=>{
+                                            props.addToCategory(props.page.url, category)
+                                            setCategoriesAddAnchor(null)
+                                        }}>
+                                            {category}
+                                        </MenuItem>
+                                )
+                            }
+                        </Menu>
+
+                        <MenuItem
+                            onClick={event=>setCategoriesRemoveAnchor(event.currentTarget)}
+                            className={classes.categoriesMenu}
+                            style={props.page.categories.length ? {display: 'flex'} : {display: 'none'}}>
+                            <ClassIcon className={classes.menuItem}/>
+                            Remove from...
+                        </MenuItem>
+
+                        <Menu
+                            open={categoriesRemoveAnchor}
+                            keepMounted
+                            anchorEl={categoriesRemoveAnchor}
+                            onClose={()=>setCategoriesRemoveAnchor(false)}
+                            className={classes.menu}>
+                            {
+                                props.page.categories.map(category=>
+                                    <MenuItem onClick={()=>{
+                                        props.removeFromCategory(props.page.url, category)
+                                        setCategoriesRemoveAnchor(null)
+                                    }}>
+                                        {category}
+                                    </MenuItem>
+                                )
+                            }
+                        </Menu>
 
                         <MenuItem
                             onClick={()=>props.handleDelete(props.page.url)} className={classes.menuItem}>

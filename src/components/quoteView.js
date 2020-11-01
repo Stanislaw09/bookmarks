@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react'
+import React, {useState} from 'react'
 import {Typography,
     makeStyles,
     Card,
@@ -27,6 +27,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import MenuIcon from '@material-ui/icons/Menu'
+import ClassIcon from '@material-ui/icons/Class'
 
 const useStyles=makeStyles(theme=>({
     card:{
@@ -64,14 +65,14 @@ const useStyles=makeStyles(theme=>({
         color: '#555'
     },
     menuBtn:{
-        padding: '6px 12px'
+        padding: '8px'
     },
     menuItem:{
         marginRight: '10px',
         color: '#444'
     },
     menu:{
-        width: '166px'
+        width: '190px'
     },
     collapseLong:{
         width: 'calc(100% - 68px)'
@@ -126,6 +127,8 @@ export const QuoteView=props=>{
     const [showText, setShowText]=useState(false)
     const [menuAnchor, setMenuAnchor]=useState(null)
     const [shareMenu, setShareMenu]=useState(false)
+    const [categoriesAddAnchor, setCategoriesAddAnchor]=useState(false)
+    const [categoriesRemoveAnchor, setCategoriesRemoveAnchor]=useState(false)
     const date=new Date(1970, 0, 1)
     date.setSeconds(props.quote.date.seconds)
 
@@ -137,14 +140,19 @@ export const QuoteView=props=>{
 
                     <Typography>
                         <Link href={props.quote.url} target='_blank' className={classes.link}>
-                            {props.quote.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]}
+                            {
+                                props.quote.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]
+                            }
                         </Link>
                     </Typography>
 
-                    <Typography className={classes.date}>{date.toLocaleDateString()}</Typography>
+                    <Typography className={classes.date}>
+                        {date.toLocaleDateString()}
+                    </Typography>
                 </div>
 
-                <IconButton onClick={event=>setMenuAnchor(event.currentTarget)} className={classes.menuBtn}>
+                <IconButton
+                    onClick={event=>setMenuAnchor(event.currentTarget)} className={classes.menuBtn}>
                     <MenuIcon className={classes.icons}/>
                 </IconButton>
 
@@ -155,7 +163,7 @@ export const QuoteView=props=>{
                     onClose={()=>setMenuAnchor(false)}
                     className={classes.menu}>
 
-                    <MenuItem onClick={()=>props.handleFavourite(props.quote.url)}>
+                    <MenuItem onClick={()=>props.handleFavourite(props.quote.date)}>
                         {
                             props.quote.favourite ?
                                 <FavoriteIcon
@@ -164,7 +172,59 @@ export const QuoteView=props=>{
                         }Favourite
                     </MenuItem>
 
-                    <MenuItem onClick={()=>props.handleDelete(props.quote.url)}>
+                    <MenuItem
+                        onClick={event=>setCategoriesAddAnchor(event.currentTarget)}
+                        className={classes.categoriesMenu}>
+                        <ClassIcon className={classes.menuItem}/>
+                        Add to...
+                    </MenuItem>
+
+                    <Menu
+                        open={categoriesAddAnchor}
+                        keepMounted
+                        anchorEl={categoriesAddAnchor}
+                        onClose={()=>setCategoriesAddAnchor(false)}
+                        className={classes.menu}>
+                        {
+                            props.categories.map(category=>
+                                !props.quote.categories.includes(category) &&
+                                    <MenuItem onClick={()=>{
+                                        props.addToCategory(props.quote.date, category)
+                                        setCategoriesAddAnchor(null)
+                                    }}>
+                                        {category}
+                                    </MenuItem>
+                            )
+                        }
+                    </Menu>
+
+                    <MenuItem
+                        onClick={event=>setCategoriesRemoveAnchor(event.currentTarget)}
+                        className={classes.categoriesMenu}
+                        style={props.quote.categories.length ? {display: 'flex'} : {display: 'none'}}>
+                        <ClassIcon className={classes.menuItem}/>
+                        Remove from...
+                    </MenuItem>
+
+                    <Menu
+                        open={categoriesRemoveAnchor}
+                        keepMounted
+                        anchorEl={categoriesRemoveAnchor}
+                        onClose={()=>setCategoriesRemoveAnchor(false)}
+                        className={classes.menu}>
+                        {
+                            props.quote.categories.map(category=>
+                                <MenuItem onClick={()=>{
+                                    props.removeFromCategory(props.quote.date, category)
+                                    setCategoriesRemoveAnchor(null)
+                                }}>
+                                    {category}
+                                </MenuItem>
+                            )
+                        }
+                    </Menu>
+
+                    <MenuItem onClick={()=>props.handleDelete(props.quote.text)}>
                         <DeleteIcon className={classes.menuItem}/>Delete
                     </MenuItem>
 
@@ -231,7 +291,8 @@ export const QuoteView=props=>{
             </Paper>
 
             <div className={classes.cardContent}>
-                {props.quote.text.length>110 &&
+                {
+                    props.quote.text.length>110 &&
                     <IconButton
                         onClick={()=>setShowText(prev=>!prev)}
                         className={showText ? classes.expandIcon : classes.expandedIcon}>
@@ -239,7 +300,10 @@ export const QuoteView=props=>{
                     </IconButton>
                 }
 
-                <Collapse in={showText} collapsedHeight={92} className={props.quote.text.length>110 ? classes.collapseLong : classes.collapseShort}>
+                <Collapse
+                    in={showText}
+                    collapsedHeight={92}
+                    className={props.quote.text.length>110 ? classes.collapseLong : classes.collapseShort}>
                     <Typography id='text' className={classes.text}>{props.quote.text}</Typography>
                 </Collapse>
             </div>
