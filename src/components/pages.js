@@ -39,7 +39,7 @@ const useStyles=makeStyles(theme=>({
     },
     searchInput:{
         width: '250px',
-        height: '36px',
+        height: '34px',
         fontSize: '18px',
         padding: '0 10px',
         margin: '4px 4px',
@@ -73,7 +73,7 @@ const useStyles=makeStyles(theme=>({
     },
     categoriesHeader:{
         fontWeight: '700',
-        margin: '6px 10px 0'
+        margin: '6px 10px'
     },
     category:{
         justifyContent: 'space-between'
@@ -110,8 +110,13 @@ const useStyles=makeStyles(theme=>({
         fontSize: '18px',
         color: '#555'
     },
+    grids:{
+        display: 'flex',
+        alignItems: 'flex-start'
+    },
     grid:{
-        padding: '8px'
+        padding: '8px',
+        minWidth: '320px'
     },
     starter:{
         fontSize: '26px',
@@ -166,10 +171,13 @@ export const Pages=props=>{
 
     const sortDate=(order)=>{
         const sorted=[...pages].sort((a,b)=>{
+            let date1=new Date(a.date)
+            let date2=new Date(b.date)
+
             if(order==='asc')
-                return a.date.seconds-b.date.seconds
+                return date1-date2
             if(order==='desc')
-                return b.date.seconds-a.date.seconds
+                return date2-date1
         })
 
         setCurrentSorting('date')
@@ -221,7 +229,6 @@ export const Pages=props=>{
 
             let _pages=data.pages.map(page=>{
                 let _cat=page.categories.filter(cat=>cat!==_category)
-
 
                 return {
                     date: page.date,
@@ -301,6 +308,7 @@ export const Pages=props=>{
 
     return(
         <div className={classes.container}>
+
             <div className={classes.nav}>
                 <div className={classes.subNav}>
                     <div className={classes.search}>
@@ -405,27 +413,49 @@ export const Pages=props=>{
                 </div>
             </div>
 
-            <Grid container spacing={1} className={classes.grid}>
-                {
-                    pages.length ? pages.map((page,i)=>
-                        (page.title.toLowerCase().includes(filter.toLowerCase()) &&
-                            ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
-                            ((page.categories.includes(categoryFilter)) || categoryFilter==='')) &&
-                                <PageView
-                                    key={i}
-                                    page={page}
-                                    categories={categories}
-                                    handleDelete={handleDelete}
-                                    handleFavourite={handleFavourite}
-                                    addToCategory={addToCategory}
-                                    removeFromCategory={removeFromCategory}/>
-                    ) :
+            {
+                pages.length ?
+                    <div className={classes.grids}>
+                        <Grid container alignItems='flex-end' direction='column' spacing={2} className={classes.grid}>
+                            {
+                                pages.map((page,i)=>(i%2==0 &&
+                                    (page.title.toLowerCase().includes(filter.toLowerCase()) &&
+                                        ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
+                                        ((page.categories.includes(categoryFilter)) || categoryFilter==='')) &&
+                                            <PageView
+                                                key={i}
+                                                page={page}
+                                                categories={categories}
+                                                handleDelete={handleDelete}
+                                                handleFavourite={handleFavourite}
+                                                addToCategory={addToCategory}
+                                                removeFromCategory={removeFromCategory}/>
+                                ))
+                            }
+                        </Grid>
+
+                        <Grid container alignItems='flex-start' direction='column' spacing={2} className={classes.grid}>
+                            {
+                                pages.map((page,i)=>(i%2==1 &&
+                                    (page.title.toLowerCase().includes(filter.toLowerCase()) &&
+                                        ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
+                                        ((page.categories.includes(categoryFilter)) || categoryFilter==='')) &&
+                                            <PageView
+                                                key={i}
+                                                page={page}
+                                                categories={categories}
+                                                handleDelete={handleDelete}
+                                                handleFavourite={handleFavourite}
+                                                addToCategory={addToCategory}
+                                                removeFromCategory={removeFromCategory}/>
+                                ))
+                            }
+                            </Grid>
+                    </div> :
                     <Typography className={classes.starter}>
                         It's a little empty in here, save something
                     </Typography>
-                }
-            </Grid>
-
+            }
         </div>
     )
 }

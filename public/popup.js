@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                                 url: tabs[0].url,
                                 favIcon: tabs[0].favIconUrl,
                                 title: tabs[0].title,
-                                date: date,
+                                date: date.toLocaleString(),
                                 favourite: false,
                                 categories: [],
                                 image: response.image

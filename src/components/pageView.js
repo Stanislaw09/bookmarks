@@ -19,8 +19,8 @@ import {FacebookShareButton,
     WhatsappIcon,
     RedditShareButton,
     RedditIcon,
-    EmailShareButton,
-    EmailIcon} from 'react-share'
+    LinkedinShareButton,
+    LinkedinIcon} from 'react-share'
 import ShareIcon from '@material-ui/icons/Share'
 import DeleteIcon from '@material-ui/icons/Delete'
 import FavoriteIcon from '@material-ui/icons/Favorite'
@@ -31,7 +31,8 @@ import ClassIcon from '@material-ui/icons/Class'
 const useStyles=makeStyles(theme=>({
     grid:{
         backgroundColor: '#20252e',
-        height: 'fit-content'
+        height: 'fit-content',
+        minWidth: '290px'
     },
     container:{
         height: '100%'
@@ -83,6 +84,11 @@ const useStyles=makeStyles(theme=>({
         width: '46px',
         margin: '0 2px'
     },
+    menuItem:{
+        marginRight: '10px',
+        color: '#444',
+        paddingLeft: '6px'
+    },
     menu:{
         width: '190px'
     },
@@ -106,7 +112,7 @@ const useStyles=makeStyles(theme=>({
     imgContainer:{
         overflow: 'hidden',
         width: '100%',
-        maxHeight: '260px'
+        maxHeight: '270px'
     },
     image:{
         width: '100%',
@@ -120,11 +126,9 @@ export const PageView=props=>{
     const [shareMenu, setShareMenu]=useState(false)
     const [categoriesAddAnchor, setCategoriesAddAnchor]=useState(false)
     const [categoriesRemoveAnchor, setCategoriesRemoveAnchor]=useState(false)
-    const date=new Date(1970, 0, 1)
-    date.setSeconds(props.page.date.seconds)
 
     return(
-        <Grid item xs={6} sm={4} md={3} className={classes.grid}>
+        <Grid item xs={12} md={12} className={classes.grid}>
             <div className={classes.container}>
                 <Paper className={classes.gridHeader} elevation={5}>
                     <div className={classes.gridSubHeader}>
@@ -144,20 +148,20 @@ export const PageView=props=>{
                             <div className={classes.headerData}>
                                 <Typography>
                                     <Link href={props.page.url} target='_blank' className={classes.link}>
-                                        {
-                                            props.page.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]
-                                        }
+                                        {props.page.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]}
                                     </Link>
                                 </Typography>
 
                                 <Typography className={classes.date}>
-                                    {date.toLocaleDateString()}
+                                    {(new Date(props.page.date)).toLocaleDateString()}
                                 </Typography>
                             </div>
                         </div>
                     </div>
 
-                    <IconButton onClick={event=>setMenuAnchor(event.currentTarget)} className={classes.menuBtn}>
+                    <IconButton
+                        onClick={event=>setMenuAnchor(event.currentTarget)}
+                        className={classes.menuBtn}>
                         <MenuIcon className={classes.menuIcon}/>
                     </IconButton>
 
@@ -169,7 +173,9 @@ export const PageView=props=>{
                         className={classes.menu}>
 
                         <MenuItem
-                            onClick={()=>props.handleFavourite(props.page.url)}
+                            onClick={()=>{
+                                props.handleFavourite(props.page.url)
+                                setMenuAnchor(null)}}
                             className={classes.menuItem}>
                             {
                                 props.page.favourite ?
@@ -181,8 +187,8 @@ export const PageView=props=>{
 
                         <MenuItem
                             onClick={event=>setCategoriesAddAnchor(event.currentTarget)}
-                            className={classes.categoriesMenu}>
-                            <ClassIcon className={classes.menuItem}/>
+                            className={classes.menuItem}>
+                            <ClassIcon className={classes.subMenuIcon}/>
                             Add to...
                         </MenuItem>
 
@@ -190,41 +196,16 @@ export const PageView=props=>{
                             open={categoriesAddAnchor}
                             keepMounted
                             anchorEl={categoriesAddAnchor}
-                            onClose={()=>setCategoriesAddAnchor(false)}
-                            className={classes.menu}>
+                            onClose={()=>setCategoriesAddAnchor(false)}>
                             {
                                 props.categories.map(category=>
-                                    !props.page.categories.includes(category) &&
-                                        <MenuItem onClick={()=>{
+                                    <MenuItem
+                                        onClick={()=>{
                                             props.addToCategory(props.page.url, category)
                                             setCategoriesAddAnchor(null)
-                                        }}>
-                                            {category}
-                                        </MenuItem>
-                                )
-                            }
-                        </Menu>
-
-                        <MenuItem
-                            onClick={event=>setCategoriesRemoveAnchor(event.currentTarget)}
-                            className={classes.categoriesMenu}
-                            style={props.page.categories.length ? {display: 'flex'} : {display: 'none'}}>
-                            <ClassIcon className={classes.menuItem}/>
-                            Remove from...
-                        </MenuItem>
-
-                        <Menu
-                            open={categoriesRemoveAnchor}
-                            keepMounted
-                            anchorEl={categoriesRemoveAnchor}
-                            onClose={()=>setCategoriesRemoveAnchor(false)}
-                            className={classes.menu}>
-                            {
-                                props.page.categories.map(category=>
-                                    <MenuItem onClick={()=>{
-                                        props.removeFromCategory(props.page.url, category)
-                                        setCategoriesRemoveAnchor(null)
-                                    }}>
+                                            setMenuAnchor(null)
+                                        }}
+                                        style={props.page.categories.includes(category) ? {color: '#999'} : {color: '#000'}}>
                                         {category}
                                     </MenuItem>
                                 )
@@ -232,12 +213,43 @@ export const PageView=props=>{
                         </Menu>
 
                         <MenuItem
-                            onClick={()=>props.handleDelete(props.page.url)} className={classes.menuItem}>
+                            onClick={event=>setCategoriesRemoveAnchor(event.currentTarget)}
+                            style={props.page.categories.length ? {display: 'flex'} : {display: 'none'}}
+                            className={classes.menuItem}>
+                            <ClassIcon className={classes.subMenuIcon}/>
+                            Remove from...
+                        </MenuItem>
+
+                        <Menu
+                            open={categoriesRemoveAnchor}
+                            keepMounted
+                            anchorEl={categoriesRemoveAnchor}
+                            onClose={()=>setCategoriesRemoveAnchor(false)}>
+                            {
+                                props.categories.map(category=>
+                                    <MenuItem onClick={()=>{
+                                        props.removeFromCategory(props.page.url, category)
+                                        setCategoriesRemoveAnchor(null)
+                                        setMenuAnchor(null)
+                                    }}
+                                        style={props.page.categories.includes(category) ? {color: '#000'} : {color: '#999'}}>
+                                        {category}
+                                    </MenuItem>
+                                )
+                            }
+                        </Menu>
+
+                        <MenuItem
+                            onClick={()=>{
+                                props.handleDelete(props.page.url)
+                                setMenuAnchor(null)}}
+                            className={classes.menuItem}>
                             <DeleteIcon className={classes.subMenuIcon}/>Delete
                         </MenuItem>
 
                         <MenuItem
-                            onClick={()=>setShareMenu(prev=>!prev)} className={classes.menuItem}>
+                            onClick={()=>setShareMenu(prev=>!prev)}
+                            className={classes.menuItem}>
                             <ShareIcon className={classes.subMenuIcon}/>Share
                         </MenuItem>
 
@@ -245,7 +257,9 @@ export const PageView=props=>{
                             <div className={classes.shareContainers}>
                                 <FacebookShareButton
                                     url={props.page.url}
-                                    onClick={()=>setMenuAnchor(null)}>
+                                    onClick={()=>{
+                                        setShareMenu(null)
+                                        setMenuAnchor(null)}}>
                                     <FacebookIcon
                                         logoFillColor="white"
                                         className={classes.share}/>
@@ -253,7 +267,9 @@ export const PageView=props=>{
 
                                 <FacebookMessengerShareButton
                                     url={props.page.url}
-                                    onClick={()=>setMenuAnchor(null)}>
+                                    onClick={()=>{
+                                        setShareMenu(null)
+                                        setMenuAnchor(null)}}>
                                     <FacebookMessengerIcon
                                         logoFillColor="white"
                                         className={classes.share}/>
@@ -261,7 +277,9 @@ export const PageView=props=>{
 
                                 <TwitterShareButton
                                     url={props.page.url}
-                                    onClick={()=>setMenuAnchor(null)}>
+                                    onClick={()=>{
+                                        setShareMenu(null)
+                                        setMenuAnchor(null)}}>
                                     <TwitterIcon
                                         logoFillColor="white"
                                         className={classes.share}/>
@@ -271,7 +289,9 @@ export const PageView=props=>{
                             <div className={classes.shareContainers}>
                                 <WhatsappShareButton
                                     url={props.page.url}
-                                    onClick={()=>setMenuAnchor(null)}>
+                                    onClick={()=>{
+                                        setShareMenu(null)
+                                        setMenuAnchor(null)}}>
                                     <WhatsappIcon
                                         logoFillColor="white"
                                         className={classes.share}/>
@@ -279,19 +299,23 @@ export const PageView=props=>{
 
                                 <RedditShareButton
                                     url={props.page.url}
-                                    onClick={()=>setMenuAnchor(null)}>
+                                    onClick={()=>{
+                                        setShareMenu(null)
+                                        setMenuAnchor(null)}}>
                                     <RedditIcon
                                         logoFillColor="white"
                                         className={classes.share}/>
                                 </RedditShareButton>
 
-                                <EmailShareButton
+                                <LinkedinShareButton
                                     url={props.page.url}
-                                    onClick={()=>setMenuAnchor(null)}>
-                                    <EmailIcon
+                                    onClick={()=>{
+                                        setShareMenu(null)
+                                        setMenuAnchor(null)}}>
+                                    <LinkedinIcon
                                         logoFillColor="white"
                                         className={classes.share}/>
-                                </EmailShareButton>
+                                </LinkedinShareButton>
                             </div>
                         </Collapse>
                     </Menu>
@@ -303,7 +327,6 @@ export const PageView=props=>{
                     </a>
                 </div>
             </div>
-
         </Grid>
     )
 }

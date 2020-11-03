@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", event=>{
                                 text: clickData.selectionText,
                                 url: clickData.pageUrl,
                                 favIcon: favIcon,
-                                date: date,
+                                date: date.toLocaleString(),
                                 categories: [],
                                 favourite: false
                         }]

@@ -6,7 +6,7 @@ import {Pages} from './pages'
 
 const useStyles=makeStyles({
     container:{
-        minWidth: '580px',
+        minWidth: '618px',
         minHeight: '800px'
     },
     header:{
@@ -31,14 +31,16 @@ const useStyles=makeStyles({
     captionEnabled:{
         color: '#fff',
         fontSize: '19px',
-        fontWeight: '500',
-        margin: '0 8px'
+        fontWeight: '700',
+        margin: '0 8px',
+        padding: '2px 14px'
     },
     captionDisabled:{
-        color: '#bdbdbd',
+        color: '#bbb',
         fontSize: '19px',
         fontWeight: '500',
-        margin: '0 8px'
+        margin: '0 8px',
+        padding: '2px 14px'
     }
 })
 

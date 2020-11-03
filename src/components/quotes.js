@@ -37,7 +37,7 @@ const useStyles=makeStyles(theme=>({
     },
     searchInput:{
         width: '250px',
-        height: '36px',
+        height: '34px',
         fontSize: '18px',
         padding: '0 10px',
         margin: '4px 4px',
@@ -71,7 +71,7 @@ const useStyles=makeStyles(theme=>({
     },
     categoriesHeader:{
         fontWeight: '700',
-        margin: '6px 10px 0'
+        margin: '6px 10px'
     },
     category:{
         justifyContent: 'space-between'
@@ -142,9 +142,9 @@ export const Quotes=props=>{
         })
     }
 
-    const handleFavourite=date=>{
+    const handleFavourite=text=>{
         let newQuotes=quotes.map(item=>{
-            if(item.date===date){
+            if(item.text===text){
                 let _item=item
                 _item.favourite=!item.favourite
                 return _item
@@ -161,10 +161,13 @@ export const Quotes=props=>{
 
     const sortDate=(order)=>{
         const sorted=[...quotes].sort((a,b)=>{
+            let date1=new Date(a.date)
+            let date2=new Date(b.date)
+
             if(order==='asc')
-                return a.date.seconds-b.date.seconds
+                return date1-date2
             if(order==='desc')
-                return b.date.seconds-a.date.seconds
+                return date2-date1
         })
 
         setCurrentSorting('date')
@@ -245,9 +248,9 @@ export const Quotes=props=>{
         setCategoriesPopover(false)
     }
 
-    const addToCategory=(date, category)=>{
+    const addToCategory=(text, category)=>{
         let _quotes=quotes.map(quote=>{
-            if(quote.date===date)
+            if(quote.text===text)
                 return{
                     url: quote.url,
                     favIcon: quote.favIcon,
@@ -267,9 +270,9 @@ export const Quotes=props=>{
         setQuotes(_quotes)
     }
 
-    const removeFromCategory=(date, category)=>{
+    const removeFromCategory=(text, category)=>{
         let _quotes=quotes.map(quote=>{
-            if(quote.date===date){
+            if(quote.text===text){
                 let _categories=quote.categories.filter(cat=>cat!=category)
 
                 return{

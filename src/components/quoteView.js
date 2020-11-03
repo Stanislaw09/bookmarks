@@ -19,8 +19,8 @@ import {FacebookShareButton,
     WhatsappIcon,
     RedditShareButton,
     RedditIcon,
-    EmailShareButton,
-    EmailIcon} from 'react-share'
+    LinkedinShareButton,
+    LinkedinIcon} from 'react-share'
 import ShareIcon from '@material-ui/icons/Share'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -69,10 +69,15 @@ const useStyles=makeStyles(theme=>({
     },
     menuItem:{
         marginRight: '10px',
-        color: '#444'
+        color: '#444',
+        paddingLeft: '6px'
     },
     menu:{
         width: '190px'
+    },
+    subMenuIcon:{
+        marginRight: '10px',
+        color: '#444'
     },
     collapseLong:{
         width: 'calc(100% - 68px)'
@@ -89,7 +94,7 @@ const useStyles=makeStyles(theme=>({
         wordWrap: 'break-word'
     },
     expandIcon:{
-        padding: '10px',
+        width: '38px',
         height: '38px',
         transform: 'rotate(180deg)',
         transition: theme.transitions.create('transform', {
@@ -97,7 +102,7 @@ const useStyles=makeStyles(theme=>({
         })
     },
     expandedIcon:{
-        padding: '10px',
+        width: '38px',
         height: '38px',
         transform: 'rotate(0deg)',
         transition: theme.transitions.create('transform', {
@@ -129,8 +134,6 @@ export const QuoteView=props=>{
     const [shareMenu, setShareMenu]=useState(false)
     const [categoriesAddAnchor, setCategoriesAddAnchor]=useState(false)
     const [categoriesRemoveAnchor, setCategoriesRemoveAnchor]=useState(false)
-    const date=new Date(1970, 0, 1)
-    date.setSeconds(props.quote.date.seconds)
 
     return(
         <Card className={classes.card}>
@@ -140,19 +143,18 @@ export const QuoteView=props=>{
 
                     <Typography>
                         <Link href={props.quote.url} target='_blank' className={classes.link}>
-                            {
-                                props.quote.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]
-                            }
+                            {props.quote.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]}
                         </Link>
                     </Typography>
 
                     <Typography className={classes.date}>
-                        {date.toLocaleDateString()}
+                        {(new Date(props.quote.date)).toLocaleDateString()}
                     </Typography>
                 </div>
 
                 <IconButton
-                    onClick={event=>setMenuAnchor(event.currentTarget)} className={classes.menuBtn}>
+                    onClick={event=>setMenuAnchor(event.currentTarget)}
+                    className={classes.menuBtn}>
                     <MenuIcon className={classes.icons}/>
                 </IconButton>
 
@@ -163,19 +165,24 @@ export const QuoteView=props=>{
                     onClose={()=>setMenuAnchor(false)}
                     className={classes.menu}>
 
-                    <MenuItem onClick={()=>props.handleFavourite(props.quote.date)}>
+                    <MenuItem
+                        onClick={()=>{
+                            props.handleFavourite(props.quote.text)
+                            setMenuAnchor(null)}}
+                        className={classes.menuItem}>
                         {
                             props.quote.favourite ?
                                 <FavoriteIcon
-                                    style={{color: 'rgba(138, 46, 68, 0.95)'}} className={classes.menuItem}/> :
-                                    <FavoriteBorderIcon className={classes.menuItem}/>
+                                    className={classes.subMenuIcon}
+                                    style={{color: 'rgba(138, 46, 68, 0.95)'}}/> :
+                                    <FavoriteBorderIcon className={classes.subMenuIcon}/>
                         }Favourite
                     </MenuItem>
 
                     <MenuItem
                         onClick={event=>setCategoriesAddAnchor(event.currentTarget)}
-                        className={classes.categoriesMenu}>
-                        <ClassIcon className={classes.menuItem}/>
+                        className={classes.menuItem}>
+                        <ClassIcon className={classes.subMenuIcon}/>
                         Add to...
                     </MenuItem>
 
@@ -183,26 +190,26 @@ export const QuoteView=props=>{
                         open={categoriesAddAnchor}
                         keepMounted
                         anchorEl={categoriesAddAnchor}
-                        onClose={()=>setCategoriesAddAnchor(false)}
-                        className={classes.menu}>
+                        onClose={()=>setCategoriesAddAnchor(false)}>
                         {
                             props.categories.map(category=>
-                                !props.quote.categories.includes(category) &&
-                                    <MenuItem onClick={()=>{
-                                        props.addToCategory(props.quote.date, category)
-                                        setCategoriesAddAnchor(null)
-                                    }}>
-                                        {category}
-                                    </MenuItem>
+                                <MenuItem onClick={()=>{
+                                    props.addToCategory(props.quote.text, category)
+                                    setCategoriesAddAnchor(null)
+                                    setMenuAnchor(null)
+                                }}
+                                    style={props.quote.categories.includes(category) ? {color: '#999'} : {color: '#000'}}>
+                                    {category}
+                                </MenuItem>
                             )
                         }
                     </Menu>
 
                     <MenuItem
                         onClick={event=>setCategoriesRemoveAnchor(event.currentTarget)}
-                        className={classes.categoriesMenu}
-                        style={props.quote.categories.length ? {display: 'flex'} : {display: 'none'}}>
-                        <ClassIcon className={classes.menuItem}/>
+                        style={props.quote.categories.length ? {display: 'flex'} : {display: 'none'}}
+                        className={classes.menuItem}>
+                        <ClassIcon className={classes.subMenuIcon}/>
                         Remove from...
                     </MenuItem>
 
@@ -210,26 +217,33 @@ export const QuoteView=props=>{
                         open={categoriesRemoveAnchor}
                         keepMounted
                         anchorEl={categoriesRemoveAnchor}
-                        onClose={()=>setCategoriesRemoveAnchor(false)}
-                        className={classes.menu}>
+                        onClose={()=>setCategoriesRemoveAnchor(false)}>
                         {
-                            props.quote.categories.map(category=>
+                            props.categories.map(category=>
                                 <MenuItem onClick={()=>{
-                                    props.removeFromCategory(props.quote.date, category)
+                                    props.removeFromCategory(props.quote.text, category)
                                     setCategoriesRemoveAnchor(null)
-                                }}>
+                                    setMenuAnchor(null)
+                                }}
+                                    style={props.quote.categories.includes(category) ? {color: '#000'} : {color: '#999'}}>
                                     {category}
                                 </MenuItem>
                             )
                         }
                     </Menu>
 
-                    <MenuItem onClick={()=>props.handleDelete(props.quote.text)}>
-                        <DeleteIcon className={classes.menuItem}/>Delete
+                    <MenuItem
+                        onClick={()=>{
+                            props.handleDelete(props.quote.text)
+                            setMenuAnchor(null)}}
+                        className={classes.menuItem}>
+                        <DeleteIcon className={classes.subMenuIcon}/>Delete
                     </MenuItem>
 
-                    <MenuItem onClick={()=>setShareMenu(prev=>!prev)}>
-                        <ShareIcon className={classes.menuItem}/>Share
+                    <MenuItem
+                        onClick={()=>setShareMenu(prev=>!prev)}
+                        className={classes.menuItem}>
+                        <ShareIcon className={classes.subMenuIcon}/>Share
                     </MenuItem>
 
                     <Collapse in={shareMenu}>
@@ -238,7 +252,9 @@ export const QuoteView=props=>{
                                 url={props.quote.url}
                                 quote={props.quote.text}
                                 hashtag="#quote"
-                                onClick={()=>setMenuAnchor(null)}>
+                                onClick={()=>{
+                                    setShareMenu(null)
+                                    setMenuAnchor(null)}}>
                                 <FacebookIcon
                                     logoFillColor="white"
                                     className={classes.share}/>
@@ -246,7 +262,9 @@ export const QuoteView=props=>{
 
                             <FacebookMessengerShareButton
                                 url={props.quote.url}
-                                onClick={()=>setMenuAnchor(null)}>
+                                onClick={()=>{
+                                    setShareMenu(null)
+                                    setMenuAnchor(null)}}>
                                 <FacebookMessengerIcon
                                     logoFillColor="white"
                                     className={classes.share}/>
@@ -254,7 +272,9 @@ export const QuoteView=props=>{
 
                             <TwitterShareButton
                                 url={props.quote.url}
-                                onClick={()=>setMenuAnchor(null)}>
+                                onClick={()=>{
+                                    setShareMenu(null)
+                                    setMenuAnchor(null)}}>
                                 <TwitterIcon
                                     logoFillColor="white"
                                     className={classes.share}/>
@@ -264,7 +284,9 @@ export const QuoteView=props=>{
                         <div className={classes.shareContainers}>
                             <WhatsappShareButton
                                 url={props.quote.url}
-                                onClick={()=>setMenuAnchor(null)}>
+                                onClick={()=>{
+                                    setShareMenu(null)
+                                    setMenuAnchor(null)}}>
                                 <WhatsappIcon
                                     logoFillColor="white"
                                     className={classes.share}/>
@@ -272,19 +294,23 @@ export const QuoteView=props=>{
 
                             <RedditShareButton
                                 url={props.quote.url}
-                                onClick={()=>setMenuAnchor(null)}>
+                                onClick={()=>{
+                                    setShareMenu(null)
+                                    setMenuAnchor(null)}}>
                                 <RedditIcon
                                     logoFillColor="white"
                                     className={classes.share}/>
                             </RedditShareButton>
 
-                            <EmailShareButton
+                            <LinkedinShareButton
                                 url={props.quote.url}
-                                onClick={()=>setMenuAnchor(null)}>
-                                <EmailIcon
+                                onClick={()=>{
+                                    setShareMenu(null)
+                                    setMenuAnchor(null)}}>
+                                <LinkedinIcon
                                     logoFillColor="white"
                                     className={classes.share}/>
-                            </EmailShareButton>
+                            </LinkedinShareButton>
                         </div>
                     </Collapse>
                 </Menu>
