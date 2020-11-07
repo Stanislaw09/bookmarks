@@ -49,7 +49,7 @@ const useStyles=makeStyles(theme=>({
     avatar:{
         width: '34px',
         height: '34px',
-        margin: '4px 8px'
+        margin: '6px'
     },
     link:{
         margin: '8px 20px',
@@ -90,7 +90,7 @@ const useStyles=makeStyles(theme=>({
         fontSize: '16px',
         fontStyle: 'italic',
         lineHeight: '1.7em',
-        padding: '6px 26px 6px 0',
+        padding: '2px 26px 6px 0',
         wordWrap: 'break-word'
     },
     expandIcon:{
@@ -148,7 +148,7 @@ export const QuoteView=props=>{
                     </Typography>
 
                     <Typography className={classes.date}>
-                        {(new Date(props.quote.date)).toLocaleDateString()}
+                        {(new Date(props.quote.date)).getDate()+'/'+(new Date(props.quote.date)).getMonth()+'/'+(new Date(props.quote.date)).getFullYear()}
                     </Typography>
                 </div>
 
@@ -328,7 +328,7 @@ export const QuoteView=props=>{
 
                 <Collapse
                     in={showText}
-                    collapsedHeight={92}
+                    collapsedHeight={90}
                     className={props.quote.text.length>110 ? classes.collapseLong : classes.collapseShort}>
                     <Typography id='text' className={classes.text}>{props.quote.text}</Typography>
                 </Collapse>

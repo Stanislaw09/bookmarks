@@ -10,20 +10,11 @@ const useStyles=makeStyles({
         minHeight: '800px'
     },
     header:{
-        backgroundColor: '#7e3477',
+        backgroundColor: '#602d5c',
         position: 'sticky',
         display: 'flex',
         top: '0',
         zIndex: '1000'
-    },
-    arrowBack:{
-        marginLeft: '12px',
-        color: '#ddd',
-        padding: '4px'
-    },
-    arrowBackIcon:{
-        width: '30px',
-        height: '30px'
     },
     tabs:{
         margin: '0 auto'
@@ -33,14 +24,14 @@ const useStyles=makeStyles({
         fontSize: '19px',
         fontWeight: '700',
         margin: '0 8px',
-        padding: '2px 14px'
+        padding: '0 14px'
     },
     captionDisabled:{
         color: '#bbb',
         fontSize: '19px',
         fontWeight: '500',
         margin: '0 8px',
-        padding: '2px 14px'
+        padding: '0 14px'
     }
 })
 

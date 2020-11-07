@@ -71,7 +71,7 @@ const useStyles=makeStyles(theme=>({
     },
     categoriesHeader:{
         fontWeight: '700',
-        margin: '6px 10px'
+        margin: '6px 16px'
     },
     category:{
         justifyContent: 'space-between'
@@ -197,7 +197,7 @@ export const Quotes=props=>{
     }
 
     const reorder=type=>{
-        currentSorting==='date' ? sortDate(type) : sortName(type)
+        currentSorting==='name' ? sortName(type) : sortDate(type)
     }
 
     const addCategory=()=>{
@@ -316,7 +316,7 @@ export const Quotes=props=>{
                     <IconButton
                         className={classes.classBtn}
                         onClick={event=>setCategoriesPopover(event.currentTarget)}>
-                        <ClassIcon style={categoryFilter!=='' ? {color: '#a3496a'} : {color: '#555'}}/>
+                        <ClassIcon style={categoryFilter!=='' ? {color: '#813759'} : {color: '#777'}}/>
                     </IconButton>
 
                     <Popover
@@ -354,7 +354,8 @@ export const Quotes=props=>{
                             <InputBase
                                 placeholder='Add new'
                                 value={category}
-                                onChange={e=>setCategory(e.target.value)}/>
+                                onChange={e=>setCategory(e.target.value)}
+                                onKeyPress={e=>{e.key==='Enter' && addCategory()}}/>
                             <AddIcon onClick={addCategory}/>
                         </MenuItem>
                     </Popover>

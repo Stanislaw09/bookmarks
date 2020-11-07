@@ -153,7 +153,7 @@ export const PageView=props=>{
                                 </Typography>
 
                                 <Typography className={classes.date}>
-                                    {(new Date(props.page.date)).toLocaleDateString()}
+                                    {(new Date(props.page.date)).getDate()+'/'+(new Date(props.page.date)).getMonth()+'/'+(new Date(props.page.date)).getFullYear()}
                                 </Typography>
                             </div>
                         </div>
