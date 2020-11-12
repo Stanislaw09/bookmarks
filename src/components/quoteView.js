@@ -162,7 +162,10 @@ export const QuoteView=props=>{
                     open={menuAnchor}
                     keepMounted
                     anchorEl={menuAnchor}
-                    onClose={()=>setMenuAnchor(false)}
+                    onClose={()=>{
+                        setMenuAnchor(false)
+                        setShareMenu(null)
+                    }}
                     className={classes.menu}>
 
                     <MenuItem
@@ -188,20 +191,28 @@ export const QuoteView=props=>{
 
                     <Menu
                         open={categoriesAddAnchor}
-                        keepMounted
                         anchorEl={categoriesAddAnchor}
-                        onClose={()=>setCategoriesAddAnchor(false)}>
+                        onClose={() => setCategoriesAddAnchor(false)}>
                         {
-                            props.categories.map(category=>
-                                <MenuItem onClick={()=>{
-                                    props.addToCategory(props.quote.text, category)
-                                    setCategoriesAddAnchor(null)
-                                    setMenuAnchor(null)
-                                }}
-                                    style={props.quote.categories.includes(category) ? {color: '#999'} : {color: '#000'}}>
-                                    {category}
-                                </MenuItem>
-                            )
+                            props.categories.length ?
+                                props.categories.map(category =>
+                                    <MenuItem
+                                        onClick={() => {
+                                            props.addToCategory(props.quote.text, category)
+                                            setCategoriesAddAnchor(null)
+                                            setMenuAnchor(null)
+                                        }}
+                                        style={props.quote.categories.includes(category) ? { color: '#999' } : { color: '#000' }}>
+                                        {category}
+                                    </MenuItem>
+                                ) :
+                                <MenuItem
+                                    onClick={() => {
+                                        setCategoriesAddAnchor(null)
+                                        setMenuAnchor(null)
+                                    }} style={{ color: '#000' }}>
+                                    You have no categories
+                                    </MenuItem>
                         }
                     </Menu>
 
@@ -217,15 +228,15 @@ export const QuoteView=props=>{
                         open={categoriesRemoveAnchor}
                         keepMounted
                         anchorEl={categoriesRemoveAnchor}
-                        onClose={()=>setCategoriesRemoveAnchor(false)}>
+                        onClose={() => setCategoriesRemoveAnchor(false)}>
                         {
-                            props.categories.map(category=>
-                                <MenuItem onClick={()=>{
+                            props.categories.map(category =>
+                                <MenuItem onClick={() => {
                                     props.removeFromCategory(props.quote.text, category)
                                     setCategoriesRemoveAnchor(null)
                                     setMenuAnchor(null)
                                 }}
-                                    style={props.quote.categories.includes(category) ? {color: '#000'} : {color: '#999'}}>
+                                    style={props.quote.categories.includes(category) ? { color: '#000' } : { color: '#999' }}>
                                     {category}
                                 </MenuItem>
                             )

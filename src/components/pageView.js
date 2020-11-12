@@ -64,13 +64,17 @@ const useStyles=makeStyles(theme=>({
         color: '#7187ab'
     },
     date:{
-        margin: 'auto 10px',
+        margin: 'auto 4px auto 10px',
         color: '#555',
         fontSize: '13px',
         fontStyle: 'italic'
     },
     headerData:{
-        display: 'inline-flex'
+        display: 'inline-flex', 
+    },
+    linkContainer:{
+        maxWidth: '120px',
+        overflow: 'hidden'
     },
     title:{
         margin: '4px 2px',
@@ -82,7 +86,7 @@ const useStyles=makeStyles(theme=>({
     menuBtn:{
         height: '46px',
         width: '46px',
-        margin: '0 2px'
+        margin: '0'
     },
     menuItem:{
         marginRight: '10px',
@@ -146,7 +150,7 @@ export const PageView=props=>{
                             }
 
                             <div className={classes.headerData}>
-                                <Typography>
+                                <Typography className={classes.linkContainer}>
                                     <Link href={props.page.url} target='_blank' className={classes.link}>
                                         {props.page.url.replace('http://','').replace('https://','').replace('en.', '').replace('www.', '').split(/[/?#]/)[0]}
                                     </Link>
@@ -167,9 +171,11 @@ export const PageView=props=>{
 
                     <Menu
                         open={menuAnchor}
-                        keepMounted
                         anchorEl={menuAnchor}
-                        onClose={()=>setMenuAnchor(false)}
+                        onClose={()=>{
+                            setMenuAnchor(false)
+                            setShareMenu(null)
+                        }}
                         className={classes.menu}>
 
                         <MenuItem
@@ -194,21 +200,28 @@ export const PageView=props=>{
 
                         <Menu
                             open={categoriesAddAnchor}
-                            keepMounted
                             anchorEl={categoriesAddAnchor}
                             onClose={()=>setCategoriesAddAnchor(false)}>
                             {
-                                props.categories.map(category=>
+                                props.categories.length ? 
+                                    props.categories.map(category=>
+                                        <MenuItem
+                                            onClick={()=>{
+                                                props.addToCategory(props.page.url, category)
+                                                setCategoriesAddAnchor(null)
+                                                setMenuAnchor(null)
+                                            }}
+                                            style={props.page.categories.includes(category) ? {color: '#999'} : {color: '#000'}}>
+                                            {category}
+                                        </MenuItem>
+                                    ) :
                                     <MenuItem
-                                        onClick={()=>{
-                                            props.addToCategory(props.page.url, category)
+                                        onClick={() => {
                                             setCategoriesAddAnchor(null)
                                             setMenuAnchor(null)
-                                        }}
-                                        style={props.page.categories.includes(category) ? {color: '#999'} : {color: '#000'}}>
-                                        {category}
+                                        }} style={{color: '#000'}}>
+                                        You have no categories
                                     </MenuItem>
-                                )
                             }
                         </Menu>
 
@@ -222,17 +235,16 @@ export const PageView=props=>{
 
                         <Menu
                             open={categoriesRemoveAnchor}
-                            keepMounted
                             anchorEl={categoriesRemoveAnchor}
                             onClose={()=>setCategoriesRemoveAnchor(false)}>
                             {
-                                props.categories.map(category=>
-                                    <MenuItem onClick={()=>{
+                                props.categories.map(category =>
+                                    <MenuItem onClick={() => {
                                         props.removeFromCategory(props.page.url, category)
                                         setCategoriesRemoveAnchor(null)
                                         setMenuAnchor(null)
                                     }}
-                                        style={props.page.categories.includes(category) ? {color: '#000'} : {color: '#999'}}>
+                                        style={props.page.categories.includes(category) ? { color: '#000' } : { color: '#999' }}>
                                         {category}
                                     </MenuItem>
                                 )
