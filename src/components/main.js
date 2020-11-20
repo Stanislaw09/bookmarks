@@ -21,7 +21,7 @@ const useStyles=makeStyles({
     },
     captionEnabled:{
         color: '#fff',
-        fontSize: '19px',
+        fontSize: '21px',
         fontWeight: '700',
         margin: '0 8px',
         padding: '0 14px'
@@ -45,8 +45,8 @@ export const Main=()=>{
 
     useEffect(()=>{
         chrome.storage.sync.get(null, data=>{
-            setPages(data.pages)
-            setQuotes(data.quotes)
+            setPages([...data.pages0, ...data.pages1, ...data.pages2, ...data.pages3, ...data.pages4])
+            setQuotes([...data.quotes0, ...data.quotes1])
             setPageCategories(data.pageCategories)
             setQuoteCategories(data.quoteCategories)
         })

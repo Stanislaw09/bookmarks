@@ -119,7 +119,7 @@ const useStyles=makeStyles(theme=>({
     },
     starter:{
         fontSize: '26px',
-        margin: '12px 16px',
+        margin: '20px',
         color: '#d5d5d5'
     }
 }))
@@ -307,7 +307,6 @@ export const Pages=props=>{
 
     return(
         <div className={classes.container}>
-
             <div className={classes.nav}>
                 <div className={classes.subNav}>
                     <div className={classes.search}>
@@ -453,7 +452,7 @@ export const Pages=props=>{
                             </Grid>
                     </div> :
                     <Typography className={classes.starter}>
-                        It's a little empty in here, save something
+                        You have nothing to show
                     </Typography>
             }
         </div>

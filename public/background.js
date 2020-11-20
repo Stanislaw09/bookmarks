@@ -6,11 +6,16 @@ document.addEventListener("DOMContentLoaded", event=>{
     }
     chrome.contextMenus.create(contextMenu)
 
-    chrome.storage.sync.get(['pages'], data => {
-        if (data.pages == undefined)
+    chrome.storage.sync.get(['pages0'], data => {
+        if (data.pages0 == undefined)
             chrome.storage.sync.set({
-                pages: [],
-                quotes: [],
+                pages0: [],
+                pages1: [],
+                pages2: [],
+                pages3: [],
+                pages4: [],
+                quotes0: [],
+                quotes1: [],
                 pageCategories: [],
                 quoteCategories: []
             })
@@ -24,25 +29,37 @@ document.addEventListener("DOMContentLoaded", event=>{
                 let favIcon = tabs[0].favIconUrl
                 let date = new Date()
 
-                chrome.storage.sync.get(['quotes'], _data => {
-                    chrome.storage.sync.set({
-                        quotes: [..._data.quotes, {
+                chrome.storage.sync.get(['quotes0', 'quotes1'], _data => {
+                    if(_data.quotes0.length<_data.quotes1.length)
+                        chrome.storage.sync.set({
+                                quotes0: [..._data.quotes0, {
+                                        text: clickData.selectionText,
+                                        url: clickData.pageUrl,
+                                        favIcon: favIcon,
+                                        date: date.toLocaleString(),
+                                        categories: [],
+                                        favourite: false
+                                }]
+                            })   
+                    else
+                        chrome.storage.sync.set({
+                            quotes1: [..._data.quotes1, {
                                 text: clickData.selectionText,
                                 url: clickData.pageUrl,
                                 favIcon: favIcon,
                                 date: date.toLocaleString(),
                                 categories: [],
                                 favourite: false
-                        }]
-                    })
+                            }]
+                        })
                 })
-
             })
+
         }
     })
 
     chrome.storage.onChanged.addListener(() => {
-        chrome.storage.sync.get(['pages', 'quotes', 'pageCategories', 'quoteCategories'], syncData => {
+        chrome.storage.sync.get(['pages0', 'pages1', 'pages2', 'pages3', 'pages4', 'quotes0', 'quotes1', 'quotes2', 'pageCategories', 'quoteCategories'], syncData => {
             console.log(syncData)
         })
     })

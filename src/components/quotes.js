@@ -420,7 +420,7 @@ export const Quotes=props=>{
                                 removeFromCategory={removeFromCategory}/>
                 ) :
                 <Typography className={classes.starter}>
-                    It's a little empty in here, save something
+                    You have nothing to show                
                 </Typography>
             }
         </div>
