@@ -70,7 +70,7 @@ const useStyles=makeStyles(theme=>({
         fontStyle: 'italic'
     },
     headerData:{
-        display: 'inline-flex', 
+        display: 'inline-flex',
     },
     linkContainer:{
         maxWidth: '120px',
@@ -180,7 +180,7 @@ export const PageView=props=>{
 
                         <MenuItem
                             onClick={()=>{
-                                props.handleFavourite(props.page.url)
+                                props.handleFavourite(props.page.url, props.page.index)
                                 setMenuAnchor(null)}}
                             className={classes.menuItem}>
                             {
@@ -203,11 +203,11 @@ export const PageView=props=>{
                             anchorEl={categoriesAddAnchor}
                             onClose={()=>setCategoriesAddAnchor(false)}>
                             {
-                                props.categories.length ? 
+                                props.categories.length ?
                                     props.categories.map(category=>
                                         <MenuItem
                                             onClick={()=>{
-                                                props.addToCategory(props.page.url, category)
+                                                props.addToCategory(props.page.url, category, props.page.index)
                                                 setCategoriesAddAnchor(null)
                                                 setMenuAnchor(null)
                                             }}
@@ -240,7 +240,7 @@ export const PageView=props=>{
                             {
                                 props.categories.map(category =>
                                     <MenuItem onClick={() => {
-                                        props.removeFromCategory(props.page.url, category)
+                                        props.removeFromCategory(props.page.url, category, props.page.index)
                                         setCategoriesRemoveAnchor(null)
                                         setMenuAnchor(null)
                                     }}
@@ -253,7 +253,7 @@ export const PageView=props=>{
 
                         <MenuItem
                             onClick={()=>{
-                                props.handleDelete(props.page.url)
+                                props.handleDelete(props.page.url, props.page.index)
                                 setMenuAnchor(null)}}
                             className={classes.menuItem}>
                             <DeleteIcon className={classes.subMenuIcon}/>Delete

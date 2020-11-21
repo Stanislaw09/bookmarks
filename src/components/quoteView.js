@@ -170,7 +170,7 @@ export const QuoteView=props=>{
 
                     <MenuItem
                         onClick={()=>{
-                            props.handleFavourite(props.quote.text)
+                            props.handleFavourite(props.quote.text, props.quote.index)
                             setMenuAnchor(null)}}
                         className={classes.menuItem}>
                         {
@@ -198,7 +198,7 @@ export const QuoteView=props=>{
                                 props.categories.map(category =>
                                     <MenuItem
                                         onClick={() => {
-                                            props.addToCategory(props.quote.text, category)
+                                            props.addToCategory(props.quote.text, category, props.quote.index)
                                             setCategoriesAddAnchor(null)
                                             setMenuAnchor(null)
                                         }}
@@ -212,7 +212,7 @@ export const QuoteView=props=>{
                                         setMenuAnchor(null)
                                     }} style={{ color: '#000' }}>
                                     You have no categories
-                                    </MenuItem>
+                                </MenuItem>
                         }
                     </Menu>
 
@@ -232,7 +232,7 @@ export const QuoteView=props=>{
                         {
                             props.categories.map(category =>
                                 <MenuItem onClick={() => {
-                                    props.removeFromCategory(props.quote.text, category)
+                                    props.removeFromCategory(props.quote.text, category, props.quote.index)
                                     setCategoriesRemoveAnchor(null)
                                     setMenuAnchor(null)
                                 }}
@@ -245,7 +245,7 @@ export const QuoteView=props=>{
 
                     <MenuItem
                         onClick={()=>{
-                            props.handleDelete(props.quote.text)
+                            props.handleDelete(props.quote.text, props.quote.index)
                             setMenuAnchor(null)}}
                         className={classes.menuItem}>
                         <DeleteIcon className={classes.subMenuIcon}/>Delete

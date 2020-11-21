@@ -22,7 +22,7 @@ import RemoveIcon from '@material-ui/icons/Remove'
 
 const useStyles=makeStyles(theme=>({
     container:{
-        marginBottom: '26px',
+        marginBottom: '40px',
         width: '100%'
     },
     nav:{
@@ -141,30 +141,46 @@ export const Pages=props=>{
         props.categories && setCategories(props.categories)
     },[props])
 
-    const handleDelete=url=>{
-        let newPages=pages.filter(item=>item.url!==url)
+    const handleDelete=(url, index)=>{
+        let newPages=pages.filter(page=>page.url!==url)
 
         setPages(newPages)
 
-        chrome.storage.sync.set({
-            pages: newPages
+        chrome.storage.sync.get([`pages${index}`], data=>{
+            let _pages=data[`pages${index}`].filter(page=>page.url!==url)
+
+            chrome.storage.sync.set({
+                [`pages${index}`]: _pages
+            })
         })
     }
 
-    const handleFavourite=url=>{
-        let newPages=pages.map(item=>{
-            if(item.url===url){
-                let _item=item
-                _item.favourite=!item.favourite
-                return _item
+    const handleFavourite=(url, index)=>{
+        let newPages=pages.map(page=>{
+            if(page.url===url){
+                let _page=page
+                _page.favourite=!page.favourite
+                return _page
             }
-            return item
+            return page
         })
 
         setPages(newPages)
 
-        chrome.storage.sync.set({
-            pages: newPages
+        chrome.storage.sync.get([`pages${index}`], data=>{
+            let _pages=data[`pages${index}`].map(page=>{
+                if(page.url===url){
+                    let _page=page
+                    _page.favourite=!page.favourite
+                    return _page
+                }
+
+                return page
+            })
+
+            chrome.storage.sync.set({
+                [`pages${index}`]: _pages
+            })
         })
     }
 
@@ -223,10 +239,34 @@ export const Pages=props=>{
     }
 
     const removeCategory=_category=>{
-        chrome.storage.sync.get(['pageCategories', 'pages'], data=>{
+        chrome.storage.sync.get(['pageCategories', 'pages0', 'pages1', 'pages2', 'pages3', 'pages4'], data=>{
             let _categories=data.pageCategories.filter(cat=>cat!==_category)
 
-            let _pages=data.pages.map(page=>{
+            chrome.storage.sync.set({
+                pageCategories: _categories,
+            })
+
+            for(let index=0;index<5;index++){
+                let _pages=data[`pages${index}`].map(page=>{
+                    let _cat=page.categories.filter(cat=>cat!==_category)
+
+                    return {
+                        date: page.date,
+                        favIcon: page.favIcon,
+                        favourite: page.favourite,
+                        image: page.image,
+                        title: page.title,
+                        url: page.url,
+                        categories: _cat
+                    }
+                })
+
+                chrome.storage.sync.set({
+                    [`pages${index}`]: _pages
+                })
+            }
+
+            let newPages=pages.map(page=>{
                 let _cat=page.categories.filter(cat=>cat!==_category)
 
                 return {
@@ -236,17 +276,13 @@ export const Pages=props=>{
                     image: page.image,
                     title: page.title,
                     url: page.url,
+                    index: page.index,
                     categories: _cat
                 }
             })
 
-            chrome.storage.sync.set({
-                pageCategories: _categories,
-                pages: _pages
-            })
-
             setCategories(_categories)
-            setPages(_pages)
+            setPages(newPages)
             setCategoryFilter('')
         })
     }
@@ -256,8 +292,29 @@ export const Pages=props=>{
         setCategoriesPopover(false)
     }
 
-    const addToCategory=(url, category)=>{
-        let _pages=pages.map(page=>{
+    const addToCategory=(url, category, index)=>{
+        chrome.storage.sync.get([`pages${index}`], data=>{
+            let _pages=data[`pages${index}`].map(page=>{
+                if(page.url===url)
+                    return{
+                        url: page.url,
+                        favIcon: page.favIcon,
+                        title: page.title,
+                        date: page.date,
+                        favourite: page.favourite,
+                        image: page.image,
+                        categories: [...page.categories, category]
+                }
+                else
+                    return page
+            })
+
+            chrome.storage.sync.set({
+                [`pages${index}`]: _pages
+            })
+        })
+
+        let newPages=pages.map(page=>{
             if(page.url===url)
                 return{
                     url: page.url,
@@ -266,21 +323,42 @@ export const Pages=props=>{
                     date: page.date,
                     favourite: page.favourite,
                     image: page.image,
+                    index: page.index,
                     categories: [...page.categories, category]
-            }
+                }
             else
                 return page
         })
 
-        chrome.storage.sync.set({
-            pages: _pages
-        })
-
-        setPages(_pages)
+        setPages(newPages)
     }
 
-    const removeFromCategory=(url, category)=>{
-        let _pages=pages.map(page=>{
+    const removeFromCategory=(url, category, index)=>{
+        chrome.storage.sync.get([`pages${index}`], data=>{
+            let _pages=data[`pages${index}`].map(page=>{
+                if(page.url===url){
+                    let _categories=page.categories.filter(cat=>cat!==category)
+
+                    return{
+                        url: page.url,
+                        favIcon: page.favIcon,
+                        title: page.title,
+                        date: page.date,
+                        favourite: page.favourite,
+                        image: page.image,
+                        categories: _categories
+                    }
+                }
+                else
+                    return page
+            })
+
+            chrome.storage.sync.set({
+                [`pages${index}`]: _pages
+            })
+        })
+
+        let newPages=pages.map(page=>{
             if(page.url===url){
                 let _categories=page.categories.filter(cat=>cat!==category)
 
@@ -291,6 +369,7 @@ export const Pages=props=>{
                     date: page.date,
                     favourite: page.favourite,
                     image: page.image,
+                    index: page.index,
                     categories: _categories
                 }
             }
@@ -298,11 +377,7 @@ export const Pages=props=>{
                 return page
         })
 
-        chrome.storage.sync.set({
-            pages: _pages
-        })
-
-        setPages(_pages)
+        setPages(newPages)
     }
 
     return(

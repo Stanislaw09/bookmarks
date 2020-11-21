@@ -45,8 +45,31 @@ export const Main=()=>{
 
     useEffect(()=>{
         chrome.storage.sync.get(null, data=>{
-            setPages([...data.pages0, ...data.pages1, ...data.pages2, ...data.pages3, ...data.pages4])
-            setQuotes([...data.quotes0, ...data.quotes1])
+            let _pages=[]
+            let _quotes=[]
+
+            for(let index=0;index<5;index++){
+                data[`pages${index}`].map(page=>{
+                    let _page={...page,
+                        index: index
+                    }
+
+                    _pages.push(_page)
+                })
+            }
+
+            for(let index=0;index<2;index++){
+                data[`quotes${index}`].map(quote=>{
+                    let _quote={...quote,
+                        index: index
+                    }
+
+                    _quotes.push(_quote)
+                })
+            }
+
+            setPages(_pages)
+            setQuotes(_quotes)
             setPageCategories(data.pageCategories)
             setQuoteCategories(data.quoteCategories)
         })

@@ -30,28 +30,22 @@ document.addEventListener("DOMContentLoaded", event=>{
                 let date = new Date()
 
                 chrome.storage.sync.get(['quotes0', 'quotes1'], _data => {
-                    if(_data.quotes0.length<_data.quotes1.length)
-                        chrome.storage.sync.set({
-                                quotes0: [..._data.quotes0, {
-                                        text: clickData.selectionText,
-                                        url: clickData.pageUrl,
-                                        favIcon: favIcon,
-                                        date: date.toLocaleString(),
-                                        categories: [],
-                                        favourite: false
-                                }]
-                            })   
-                    else
-                        chrome.storage.sync.set({
-                            quotes1: [..._data.quotes1, {
-                                text: clickData.selectionText,
-                                url: clickData.pageUrl,
-                                favIcon: favIcon,
-                                date: date.toLocaleString(),
-                                categories: [],
-                                favourite: false
-                            }]
-                        })
+                    let index=0
+
+                    if(_data.quotes0.length>_data.quotes1.length)
+                        index=1
+
+                    chrome.storage.sync.set({
+                        [`quotes${index}`]: [..._data[`quotes${index}`], {
+                            text: clickData.selectionText,
+                            url: clickData.pageUrl,
+                            favIcon: favIcon,
+                            date: date.toLocaleString(),
+                            categories: [],
+                            favourite: false
+                        }]
+                    })
+
                 })
             })
 

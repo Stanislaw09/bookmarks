@@ -21,7 +21,7 @@ import RemoveIcon from '@material-ui/icons/Remove'
 
 const useStyles=makeStyles(theme=>({
     container:{
-        margin: '0 0 20px'
+        margin: '0 0 140px'
     },
     nav:{
         backgroundColor: '#ddd'
@@ -132,30 +132,46 @@ export const Quotes=props=>{
         props.categories && setCategories(props.categories)
     },[props])
 
-    const handleDelete=text=>{
-        let newQuotes=quotes.filter(item=>item.text!==text)
+    const handleDelete=(text, index)=>{
+        let newQuotes=quotes.filter(quote=>quote.text!==text)
 
         setQuotes(newQuotes)
 
-        chrome.storage.sync.set({
-            quotes: newQuotes
+        chrome.storage.sync.get([`quotes${index}`], data=>{
+            let _quotes=data[`quotes${index}`].filter(quote=>quote.text!==text)
+
+            chrome.storage.sync.set({
+                [`quotes${index}`]: _quotes
+            })
         })
     }
 
-    const handleFavourite=text=>{
-        let newQuotes=quotes.map(item=>{
-            if(item.text===text){
-                let _item=item
-                _item.favourite=!item.favourite
-                return _item
+    const handleFavourite=(text, index)=>{
+        let newQuotes=quotes.map(quote=>{
+            if(quote.text===text){
+                let _quote=quote
+                _quote.favourite=!quote.favourite
+                return _quote
             }
-            return item
+            return quote
         })
 
         setQuotes(newQuotes)
 
-        chrome.storage.sync.set({
-            quotes: newQuotes
+        chrome.storage.sync.get([`quotes${index}`], data=>{
+            let _quotes=data[`quotes${index}`].map(quote=>{
+                if(quote.text===text){
+                    let _quote=quote
+                    _quote.favourite=!quote.favourite
+                    return _quote
+                }
+
+                return quote
+            })
+
+            chrome.storage.sync.set({
+                [`quotes${index}`]: _quotes
+            })
         })
     }
 
@@ -216,29 +232,48 @@ export const Quotes=props=>{
     }
 
     const removeCategory=_category=>{
-        chrome.storage.sync.get(['quoteCategories', 'quotes'], data=>{
+        chrome.storage.sync.get(['quoteCategories', 'quotes0', 'quotes1'], data=>{
             let _categories=data.quoteCategories.filter(cat=>cat!==_category)
 
-            let _quotes=data.quotes.map(quote=>{
+            chrome.storage.sync.set({
+                quoteCategories: _categories,
+            })
+
+            for(let index=0;index<2;index++){
+                let _quotes=data[`quotes${index}`].map(quote=>{
+                    let _cat=quote.categories.filter(cat=>cat!==_category)
+
+                    return {
+                        text: quote.text,
+                        url: quote.url,
+                        favIcon: quote.favIcon,
+                        date: quote.date,
+                        favourite: quote.favourite,
+                        categories: _cat
+                    }
+                })
+
+                chrome.storage.sync.set({
+                    [`quotes${index}`]: _quotes
+                })
+            }
+
+            let newQuotes=quotes.map(quote=>{
                 let _cat=quote.categories.filter(cat=>cat!==_category)
 
-                return{
+                return {
                     text: quote.text,
                     url: quote.url,
                     favIcon: quote.favIcon,
                     date: quote.date,
                     favourite: quote.favourite,
+                    index: quote.index,
                     categories: _cat
                 }
             })
 
-            chrome.storage.sync.set({
-                quoteCategories: _categories,
-                quotes: _quotes
-            })
-
             setCategories(_categories)
-            setQuotes(_quotes)
+            setQuotes(newQuotes)
             setCategoryFilter('')
         })
     }
@@ -248,8 +283,28 @@ export const Quotes=props=>{
         setCategoriesPopover(false)
     }
 
-    const addToCategory=(text, category)=>{
-        let _quotes=quotes.map(quote=>{
+    const addToCategory=(text, category, index)=>{
+        chrome.storage.sync.get([`quotes${index}`], data=>{
+            let _quotes=data[`quotes${index}`].map(quote=>{
+                if(quote.text===text)
+                    return{
+                        url: quote.url,
+                        favIcon: quote.favIcon,
+                        date: quote.date,
+                        favourite: quote.favourite,
+                        text: quote.text,
+                        categories: [...quote.categories, category]
+                }
+                else
+                    return quote
+            })
+
+            chrome.storage.sync.set({
+                [`quotes${index}`]: _quotes
+            })
+        })
+
+        let newQuotes=quotes.map(quote=>{
             if(quote.text===text)
                 return{
                     url: quote.url,
@@ -257,23 +312,43 @@ export const Quotes=props=>{
                     date: quote.date,
                     favourite: quote.favourite,
                     text: quote.text,
+                    index: quote.index,
                     categories: [...quote.categories, category]
-            }
+                }
             else
                 return quote
         })
 
-        chrome.storage.sync.set({
-            quotes: _quotes
-        })
-
-        setQuotes(_quotes)
+        setQuotes(newQuotes)
     }
 
-    const removeFromCategory=(text, category)=>{
-        let _quotes=quotes.map(quote=>{
+    const removeFromCategory=(text, category, index)=>{
+        chrome.storage.sync.get([`quotes${index}`], data=>{
+            let _quotes=data[`quotes${index}`].map(quote=>{
+                if(quote.text===text){
+                    let _categories=quote.categories.filter(cat=>cat!==category)
+
+                    return{
+                        url: quote.url,
+                        favIcon: quote.favIcon,
+                        date: quote.date,
+                        favourite: quote.favourite,
+                        text: quote.text,
+                        categories: _categories
+                    }
+                }
+                else
+                    return quote
+            })
+
+            chrome.storage.sync.set({
+                [`quotes${index}`]: _quotes
+            })
+        })
+
+        let newQuotes=quotes.map(quote=>{
             if(quote.text===text){
-                let _categories=quote.categories.filter(cat=>cat!=category)
+                let _categories=quote.categories.filter(cat=>cat!==category)
 
                 return{
                     url: quote.url,
@@ -281,6 +356,7 @@ export const Quotes=props=>{
                     date: quote.date,
                     favourite: quote.favourite,
                     text: quote.text,
+                    index: quote.index,
                     categories: _categories
                 }
             }
@@ -288,11 +364,7 @@ export const Quotes=props=>{
                 return quote
         })
 
-        chrome.storage.sync.set({
-            quotes: _quotes
-        })
-
-        setQuotes(_quotes)
+        setQuotes(newQuotes)
     }
 
     return(
@@ -420,7 +492,7 @@ export const Quotes=props=>{
                                 removeFromCategory={removeFromCategory}/>
                 ) :
                 <Typography className={classes.starter}>
-                    You have nothing to show                
+                    You have nothing to show
                 </Typography>
             }
         </div>
