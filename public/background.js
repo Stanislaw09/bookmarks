@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", event=>{
     }
     chrome.contextMenus.create(contextMenu)
 
-    chrome.storage.sync.get(['pages0'], data => {
-        if (data.pages0 == undefined)
+    chrome.storage.sync.get(['pages', 'pages0'], data => {
+        if(data.pages0 == undefined)
             chrome.storage.sync.set({
                 pages0: [],
                 pages1: [],
@@ -19,6 +19,12 @@ document.addEventListener("DOMContentLoaded", event=>{
                 pageCategories: [],
                 quoteCategories: []
             })
+        if(data.pages.length>0){
+            chrome.storage.sync.set({
+                pages0: [...data.pages],
+                pages: []
+            })
+        }
     })
 
     chrome.contextMenus.onClicked.addListener(clickData => {
@@ -53,7 +59,7 @@ document.addEventListener("DOMContentLoaded", event=>{
     })
 
     chrome.storage.onChanged.addListener(() => {
-        chrome.storage.sync.get(['pages0', 'pages1', 'pages2', 'pages3', 'pages4', 'quotes0', 'quotes1', 'quotes2', 'pageCategories', 'quoteCategories'], syncData => {
+        chrome.storage.sync.get(['pages', 'pages0', 'pages1', 'pages2', 'pages3', 'pages4', 'quotes0', 'quotes1', 'quotes2', 'pageCategories', 'quoteCategories'], syncData => {
             console.log(syncData)
         })
     })

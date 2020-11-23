@@ -28,6 +28,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite'
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder'
 import MenuIcon from '@material-ui/icons/Menu'
 import ClassIcon from '@material-ui/icons/Class'
+import Highlighter from "react-highlight-words"
+
 
 const useStyles=makeStyles(theme=>({
     card:{
@@ -339,9 +341,15 @@ export const QuoteView=props=>{
 
                 <Collapse
                     in={showText}
-                    collapsedHeight={90}
+                    collapsedHeight={88}
                     className={props.quote.text.length>110 ? classes.collapseLong : classes.collapseShort}>
-                    <Typography id='text' className={classes.text}>{props.quote.text}</Typography>
+                    <Typography id='text' className={classes.text}>
+                    <Highlighter
+                        searchWords={[props.filter]}
+                        autoEscape={true}
+                        highlightStyle={{backgroundColor: 'rgba(138, 46, 68, 0.85)'}}
+                        textToHighlight={props.quote.text}/>
+                    </Typography>
                 </Collapse>
             </div>
         </Card>

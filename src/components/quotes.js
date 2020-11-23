@@ -486,6 +486,7 @@ export const Quotes=props=>{
                                 key={i}
                                 quote={quote}
                                 categories={categories}
+                                filter={filter}
                                 handleDelete={handleDelete}
                                 handleFavourite={handleFavourite}
                                 addToCategory={addToCategory}

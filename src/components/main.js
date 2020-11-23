@@ -10,7 +10,7 @@ const useStyles=makeStyles({
         minHeight: '800px'
     },
     header:{
-        backgroundColor: '#602d5c',
+        backgroundColor: '#572a59',
         position: 'sticky',
         display: 'flex',
         top: '0',

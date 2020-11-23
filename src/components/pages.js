@@ -202,7 +202,6 @@ export const Pages=props=>{
 
     const sortName=(order)=>{
         const sorted=[...pages].sort((a,b)=>{
-
             if(a.title<b.title && order==='asc')
                 return -1
             if(a.title<b.title && order==='desc')
@@ -500,6 +499,7 @@ export const Pages=props=>{
                                                 key={i}
                                                 page={page}
                                                 categories={categories}
+                                                filter={filter}
                                                 handleDelete={handleDelete}
                                                 handleFavourite={handleFavourite}
                                                 addToCategory={addToCategory}
@@ -518,6 +518,7 @@ export const Pages=props=>{
                                                 key={i}
                                                 page={page}
                                                 categories={categories}
+                                                filter={filter}
                                                 handleDelete={handleDelete}
                                                 handleFavourite={handleFavourite}
                                                 addToCategory={addToCategory}
