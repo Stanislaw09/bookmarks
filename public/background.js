@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 document.addEventListener("DOMContentLoaded", event=>{
     let contextMenu = {
         "id": "bookmarks",
@@ -7,7 +8,7 @@ document.addEventListener("DOMContentLoaded", event=>{
     chrome.contextMenus.create(contextMenu)
 
     chrome.storage.sync.get(['pages', 'pages0'], data => {
-        if(data.pages0 == undefined)
+        if(data.pages0 === undefined)
             chrome.storage.sync.set({
                 pages0: [],
                 pages1: [],
@@ -19,19 +20,15 @@ document.addEventListener("DOMContentLoaded", event=>{
                 pageCategories: [],
                 quoteCategories: []
             })
-        if(data.pages.length>0){
-            chrome.storage.sync.set({
-                pages0: [...data.pages],
-                pages: []
-            })
+        if(data.pages!==undefined){
+            chrome.storage.sync.remove('pages')
         }
     })
 
     chrome.contextMenus.onClicked.addListener(clickData => {
-        if (clickData.menuItemId == 'bookmarks' && clickData.selectionText) {
-            let date = new Date()
+        if (clickData.menuItemId === 'bookmarks' && clickData.selectionText) {
 
-            let icon = chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
+            chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
                 let favIcon = tabs[0].favIconUrl
                 let date = new Date()
 

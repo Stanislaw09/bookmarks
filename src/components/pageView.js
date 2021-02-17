@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {
+import{
     Typography,
     makeStyles,
     Avatar,
@@ -9,9 +9,8 @@ import {
     IconButton,
     Menu,
     Grid,
-    MenuItem
-} from '@material-ui/core'
-import {
+    MenuItem} from '@material-ui/core'
+import{
     FacebookShareButton,
     FacebookIcon,
     FacebookMessengerShareButton,
@@ -23,8 +22,7 @@ import {
     RedditShareButton,
     RedditIcon,
     LinkedinShareButton,
-    LinkedinIcon
-} from 'react-share'
+    LinkedinIcon} from 'react-share'
 import ShareIcon from '@material-ui/icons/Share'
 import DeleteIcon from '@material-ui/icons/Delete'
 import FavoriteIcon from '@material-ui/icons/Favorite'
@@ -149,7 +147,7 @@ export const PageView = props => {
 
                         <div className={classes.headerContent}>
                             {
-                                props.page.title.length>46 ? 
+                                props.page.title.length>46 ?
                                     <Typography id="title" className={classes.title}>
                                         <Highlighter
                                             searchWords={[props.filter]}
@@ -159,10 +157,10 @@ export const PageView = props => {
                                     </Typography> :
                                     <Typography id="title" className={classes.title}>
                                         <Highlighter
-                                            searchWords={[props.filter]}
-                                            autoEscape={true}
-                                            highlightStyle={{backgroundColor: 'rgba(138, 46, 68, 0.85)'}}
-                                            textToHighlight={props.page.title}/>
+                                          searchWords={[props.filter]}
+                                          autoEscape={true}
+                                          highlightStyle={{backgroundColor: 'rgba(138, 46, 68, 0.85)'}}
+                                          textToHighlight={props.page.title}/>
                                     </Typography>
                             }
 
@@ -174,153 +172,169 @@ export const PageView = props => {
                                 </Typography>
 
                                 <Typography className={classes.date}>
-                                    {
-                                        (new Date(props.page.date)).getDate() + '/' + (
-                                        new Date(props.page.date)).getMonth() + '/' + (
-                                        new Date(props.page.date)).getFullYear()
-                                    }
+                                    {(new Date(props.page.date)).getDate()+'/'+(new Date(props.page.date)).getMonth()+'/'+(new Date(props.page.date)).getFullYear()}
                                 </Typography>
                             </div>
                         </div>
                     </div>
 
-                    <IconButton onClick={event => setMenuAnchor(event.currentTarget)} className={classes.menuBtn}>
+                    <IconButton
+                        onClick={event => setMenuAnchor(event.currentTarget)}
+                        className={classes.menuBtn}>
                         <MenuIcon className={classes.menuIcon}/>
                     </IconButton>
 
-                    <Menu open={menuAnchor} anchorEl={menuAnchor} onClose={() => {
+                    <Menu
+                        open={menuAnchor}
+                        anchorEl={menuAnchor}
+                        onClose={()=>{
                             setMenuAnchor(false)
-                            setShareMenu(null)
-                        }} className={classes.menu}>
+                            setShareMenu(null)}}
+                        className={classes.menu}>
 
-                        <MenuItem onClick={() => {
+                        <MenuItem
+                            onClick={() => {
                                 props.handleFavourite(props.page.url, props.page.index)
-                                setMenuAnchor(null)
-                            }} className={classes.menuItem}>
+                                setMenuAnchor(null)}}
+                            className={classes.menuItem}>
                             {
-                                props.page.favourite
-                                    ? <FavoriteIcon style={{
-                                                color: 'rgba(138, 46, 68, 0.95)'
-                                            }} className={classes.subMenuIcon}/>
-                                    : <FavoriteBorderIcon className={classes.subMenuIcon}/>
+                                props.page.favourite ?
+                                    <FavoriteIcon
+                                        style={{color: 'rgba(138, 46, 68, 0.95)'}}
+                                        className={classes.subMenuIcon}/> :
+                                    <FavoriteBorderIcon className={classes.subMenuIcon}/>
                             }Favourite
                         </MenuItem>
 
-                        <MenuItem onClick={event => setCategoriesAddAnchor(event.currentTarget)} className={classes.menuItem}>
+                        <MenuItem
+                            onClick={event => setCategoriesAddAnchor(event.currentTarget)}
+                            className={classes.menuItem}>
                             <ClassIcon className={classes.subMenuIcon}/>
                             Add to...
                         </MenuItem>
 
-                        <Menu open={categoriesAddAnchor} anchorEl={categoriesAddAnchor} onClose={() => setCategoriesAddAnchor(false)}>
+                        <Menu
+                            open={categoriesAddAnchor}
+                            anchorEl={categoriesAddAnchor}
+                            onClose={() => setCategoriesAddAnchor(false)}>
                             {
-                                props.categories.length
-                                    ? props.categories.map(category => <MenuItem onClick={() => {
-                                            props.addToCategory(props.page.url, category, props.page.index)
-                                            setCategoriesAddAnchor(null)
-                                            setMenuAnchor(null)
-                                        }} style={props.page.categories.includes(category)
-                                            ? {
-                                                color: '#999'
-                                            }
-                                            : {
-                                                color: '#000'
-                                            }}>
-                                        {category}
-                                    </MenuItem>)
-                                    : <MenuItem onClick={() => {
+                                props.categories.length ?
+                                    props.categories.map(category=>
+                                        <MenuItem
+                                            onClick={()=>{
+                                                props.addToCategory(props.page.url, category, props.page.index)
                                                 setCategoriesAddAnchor(null)
-                                                setMenuAnchor(null)
-                                            }} style={{
-                                                color: '#000'
-                                            }}>
-                                            You have no categories
-                                        </MenuItem>
+                                                setMenuAnchor(null)}}
+                                            style={props.page.categories.includes(category) ? { color: '#999'} : {color: '#000'}}>
+                                            {category}
+                                    </MenuItem>) :
+                                    <MenuItem
+                                        onClick={() => {
+                                            setCategoriesAddAnchor(null)
+                                            setMenuAnchor(null)}}
+                                        style={{color: '#000'}}>
+                                        You have no categories
+                                    </MenuItem>
                             }
                         </Menu>
 
-                        <MenuItem onClick={event => setCategoriesRemoveAnchor(event.currentTarget)} style={props.page.categories.length
-                                ? {
-                                    display: 'flex'
-                                }
-                                : {
-                                    display: 'none'
-                                }} className={classes.menuItem}>
+                        <MenuItem
+                            onClick={event => setCategoriesRemoveAnchor(event.currentTarget)}
+                            style={props.page.categories.length ? {display: 'flex'} : {display: 'none'}}
+                            className={classes.menuItem}>
                             <ClassIcon className={classes.subMenuIcon}/>
                             Remove from...
                         </MenuItem>
 
-                        <Menu open={categoriesRemoveAnchor} anchorEl={categoriesRemoveAnchor} onClose={() => setCategoriesRemoveAnchor(false)}>
+                        <Menu
+                            open={categoriesRemoveAnchor}
+                            anchorEl={categoriesRemoveAnchor}
+                            onClose={() => setCategoriesRemoveAnchor(false)}>
                             {
                                 props.categories.map(category => <MenuItem onClick={() => {
                                         props.removeFromCategory(props.page.url, category, props.page.index)
                                         setCategoriesRemoveAnchor(null)
-                                        setMenuAnchor(null)
-                                    }} style={props.page.categories.includes(category)
-                                        ? {
-                                            color: '#000'
-                                        }
-                                        : {
-                                            color: '#999'
-                                        }}>
+                                        setMenuAnchor(null)}}
+                                        style={props.page.categories.includes(category) ? {color: '#000'} : {color: '#999'}}>
                                     {category}
                                 </MenuItem>)
                             }
                         </Menu>
 
-                        <MenuItem onClick={() => {
+                        <MenuItem
+                            onClick={() => {
                                 props.handleDelete(props.page.url, props.page.index)
-                                setMenuAnchor(null)
-                            }} className={classes.menuItem}>
-                            <DeleteIcon className={classes.subMenuIcon}/>Delete
+                                setMenuAnchor(null)}}
+                            className={classes.menuItem}>
+                            <DeleteIcon className={classes.subMenuIcon}/>
+                            Delete
                         </MenuItem>
 
-                        <MenuItem onClick={() => setShareMenu(prev => !prev)} className={classes.menuItem}>
+                        <MenuItem
+                            onClick={() => setShareMenu(prev => !prev)}
+                            className={classes.menuItem}>
                             <ShareIcon className={classes.subMenuIcon}/>Share
                         </MenuItem>
 
                         <Collapse in={shareMenu}>
                             <div className={classes.shareContainers}>
-                                <FacebookShareButton url={props.page.url} onClick={() => {
-                                        setShareMenu(null)
-                                        setMenuAnchor(null)
-                                    }}>
-                                    <FacebookIcon logoFillColor="white" className={classes.share}/>
+                                <FacebookShareButton
+                                url={props.page.url}
+                                onClick={() => {
+                                    setShareMenu(null)
+                                    setMenuAnchor(null)}}>
+                                    <FacebookIcon
+                                        logoFillColor="white"
+                                        className={classes.share}/>
                                 </FacebookShareButton>
 
-                                <FacebookMessengerShareButton url={props.page.url} onClick={() => {
+                                <FacebookMessengerShareButton
+                                    url={props.page.url}
+                                    onClick={() => {
                                         setShareMenu(null)
-                                        setMenuAnchor(null)
-                                    }}>
-                                    <FacebookMessengerIcon logoFillColor="white" className={classes.share}/>
+                                        setMenuAnchor(null)}}>
+                                    <FacebookMessengerIcon
+                                        logoFillColor="white"
+                                        className={classes.share}/>
                                 </FacebookMessengerShareButton>
 
-                                <TwitterShareButton url={props.page.url} onClick={() => {
+                                <TwitterShareButton
+                                    url={props.page.url}
+                                    onClick={() => {
                                         setShareMenu(null)
-                                        setMenuAnchor(null)
-                                    }}>
-                                    <TwitterIcon logoFillColor="white" className={classes.share}/>
+                                        setMenuAnchor(null)}}>
+                                    <TwitterIcon
+                                        logoFillColor="white"
+                                        className={classes.share}/>
                                 </TwitterShareButton>
                             </div>
 
                             <div className={classes.shareContainers}>
-                                <WhatsappShareButton url={props.page.url} onClick={() => {
+                                <WhatsappShareButton
+                                    url={props.page.url}
+                                    onClick={() => {
                                         setShareMenu(null)
-                                        setMenuAnchor(null)
-                                    }}>
-                                    <WhatsappIcon logoFillColor="white" className={classes.share}/>
+                                        setMenuAnchor(null)}}>
+                                    <WhatsappIcon
+                                        logoFillColor="white"
+                                        className={classes.share}/>
                                 </WhatsappShareButton>
 
-                                <RedditShareButton url={props.page.url} onClick={() => {
+                                <RedditShareButton
+                                    url={props.page.url}
+                                    onClick={() => {
                                         setShareMenu(null)
-                                        setMenuAnchor(null)
-                                    }}>
-                                    <RedditIcon logoFillColor="white" className={classes.share}/>
+                                        setMenuAnchor(null)}}>
+                                    <RedditIcon
+                                        logoFillColor="white"
+                                        className={classes.share}/>
                                 </RedditShareButton>
 
-                                <LinkedinShareButton url={props.page.url} onClick={() => {
+                                <LinkedinShareButton
+                                    url={props.page.url}
+                                    onClick={() => {
                                         setShareMenu(null)
-                                        setMenuAnchor(null)
-                                    }}>
+                                        setMenuAnchor(null)}}>
                                     <LinkedinIcon logoFillColor="white" className={classes.share}/>
                                 </LinkedinShareButton>
                             </div>
