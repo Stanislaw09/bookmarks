@@ -204,13 +204,13 @@ export const Pages = props => {
 
    const sortName = (order) => {
       const sorted = [...pages].sort((a, b) => {
-         if (a.title<b.title && order==='asc')
+         if (a.title < b.title && order === 'asc')
             return -1
-         if (a.title<b.title && order==='desc')
+         if (a.title < b.title && order === 'desc')
             return 1
-         if (a.title>b.title && order==='asc')
+         if (a.title > b.title && order === 'asc')
             return 1
-         if (a.title>b.title && order==='desc')
+         if (a.title > b.title && order === 'desc')
             return -1
          return 0
       })
@@ -495,7 +495,7 @@ export const Pages = props => {
                <div className={classes.grids}>
                   <Grid container alignItems='flex-end' direction='column' spacing={2} className={classes.grid}>
                      {
-                        pages.map((page, i)=>(i%2===0 &&
+                        pages.map((page, i) => (i % 2 === 0 &&
                            (page.title.toLowerCase().includes(filter.toLowerCase()) &&
                               ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
                               ((page.categories.includes(categoryFilter)) || categoryFilter === '')) &&
@@ -514,7 +514,7 @@ export const Pages = props => {
 
                   <Grid container alignItems='flex-start' direction='column' spacing={2} className={classes.grid}>
                      {
-                        pages.map((page, i)=>(i%2===1 &&
+                        pages.map((page, i) => (i % 2 === 1 &&
                            (page.title.toLowerCase().includes(filter.toLowerCase()) &&
                               ((favouriteFilter && page.favourite) || (!favouriteFilter)) &&
                               ((page.categories.includes(categoryFilter)) || categoryFilter === '')) &&
